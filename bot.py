@@ -92,18 +92,20 @@ async def user(ctx,member:discord.Member= None):
     if member == None:
         emb = discord.Embed(title='Информация о пользователе',color = ctx.author.color)
         emb.add_field(name="Имя:",value=ctx.author.display_name,inline=False)
+        emb.add_field(name="Статус:",value=ctx.author.status)
         emb.add_field(name="В discord с:", value=ctx.author.created_at.strftime("%d.%m.%Y, %H:%M:%S"))
         emb.add_field(name="На сервере с:",value=ctx.author.joined_at.strftime("%d.%m.%Y, %H:%M:%S"),inline=False)
-        emb.add_field(name="`Айди:`", value=ctx.author.id,inline=False)
+        emb.add_field(name="`id:`", value=ctx.author.id,inline=False)
         emb.set_thumbnail(url=ctx.author.avatar_url)
         emb.set_footer(text=f"Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(title='Информация о пользователе',color = member.color)
         emb.add_field(name="Имя:",value=member.display_name,inline=False)
+        emb.add_field(name="Статус:",value=member.status)
         emb.add_field(name="В discord с:", value=member.created_at.strftime("%d.%m.%Y, %H:%M:%S"))
         emb.add_field(name="На сервере с:",value=member.joined_at.strftime("%d.%m.%Y, %H:%M:%S"),inline=False)
-        emb.add_field(name="`Айди:`", value=member.id,inline=False)
+        emb.add_field(name="`id:`", value=member.id,inline=False)
         emb.set_thumbnail(url=member.avatar_url)
         emb.set_footer(text=f"Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed = emb)
@@ -142,17 +144,19 @@ async def serverinfo(ctx):
 
   icon = str(ctx.guild.icon_url)
    
-  embed = discord.Embed(
-      title=name + " Server Information",
-      description=description,
-      color=discord.Color.blue()
+  emb = discord.Embed(
+      title="Информация о сервере:",
+      color=ctx.message.author.color
     )
-  embed.set_thumbnail(url=icon)
-  embed.add_field(name="Owner", value=owner, inline=True)
-  embed.add_field(name="Server ID", value=id, inline=True)
-  embed.add_field(name="Region", value=region, inline=True)
-  embed.add_field(name="Member Count", value=memberCount, inline=True)
-  await ctx.send(embed=embed)
+  emb.set_thumbnail(url=icon)
+  emb.add_field(name="Название:", value=name,inline=True)
+  emb.add_field(name="Описание:",value=description,inline=True)
+  emb.add_field(name="Владелец:", value=owner, inline=True)
+  emb.add_field(name="Участников:", value=memberCount, inline=True)
+  emb.add_field(name="Регион:",value=name,inline=True)
+  emb.add_field(name="`id:`", value=id,inline=True)
+  emb.set_footer(text=f"Использовано пользователем:\n{ctx.message.author}", icon_url=ctx.message.author.avatar_url)
+  await ctx.send(embed=emb)
   
 @client.command(aliases=["сказать","озв"])
 @has_permissions(administrator=True)
@@ -160,5 +164,6 @@ async def say(ctx, *,text):
     await ctx.message.delete()
     await ctx.send(text)
 
-token = os.environ.get("BOT_TOKEN")     
-client.run(str(token))
+client.run(config.TOKEN)
+#token = os.environ.get("BOT_TOKEN")     
+#bot.run(str(token))
