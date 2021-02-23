@@ -161,4 +161,4 @@ async def say(ctx, *,text):
     await ctx.send(text)
 
 token = os.environ.get("BOT_TOKEN")     
-bot.run(str(token))
+client.run(str(token))
