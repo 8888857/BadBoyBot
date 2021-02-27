@@ -119,7 +119,7 @@ async def user(ctx,member:discord.Member= None,guild: discord.Guild = None):
         emb.add_field(name="Высшая роль на сервере:", value=f"{ctx.message.author.top_role.mention}",inline=False)
         emb.add_field(name="`id:`", value=ctx.message.author.id,inline=False)
         emb.set_thumbnail(url=ctx.author.avatar_url)
-        emb.set_footer(text=f"`Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
+        emb.set_footer(text=f"Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(title='Информация о пользователе',color = member.color)
