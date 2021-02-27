@@ -8,8 +8,12 @@ import asyncio
 from asyncio import sleep
 import ast
 import config
+import datetime
 
 client = commands.Bot(command_prefix = config.prefix, intents = discord.Intents.all())
+
+delta = datetime.timedelta(hours=3)
+timeform1 = " %H:%M %d.%m.%Y"
 
 @client.event
 async def on_ready():
@@ -25,7 +29,7 @@ async def on_ready():
           await sleep(15)
 
 def insert_returns(body):
-    # insert return stmt if the last expression is a expression statement
+    # insert return stmt if the la9st expression is a expression statement
     if isinstance(body[-1], ast.Expr):
         body[-1] = ast.Return(body[-1].value)
         ast.fix_missing_locations(body[-1])
@@ -88,23 +92,58 @@ async def eval_fn(ctx, *, cmd):
     result = (await eval(f"{fn_name}()", env))
 
 @client.command(aliases=["юзер","юзеринфо","userinfo","пользователь","я","i"])
-async def user(ctx,member:discord.Member= None):
+async def user(ctx,member:discord.Member= None,guild: discord.Guild = None):
     if member == None:
         emb = discord.Embed(title='Информация о пользователе',color = ctx.author.color)
         emb.add_field(name="Имя:",value=ctx.author.display_name,inline=False)
-        emb.add_field(name="Статус:",value=ctx.author.status)
-        emb.add_field(name="В discord с:", value=ctx.author.created_at.strftime("%d.%m.%Y, %H:%M:%S"))
-        emb.add_field(name="На сервере с:",value=ctx.author.joined_at.strftime("%d.%m.%Y, %H:%M:%S"),inline=False)
-        emb.add_field(name="`id:`", value=ctx.author.id,inline=False)
+        emb.add_field(name="Статус:", value=ctx.message.author.activity,inline=False)
+        t = ctx.message.author.status
+        if t == discord.Status.online:
+            d = "<:online:813698625569947680>  В сети"
+
+        t = ctx.message.author.status
+        if t == discord.Status.offline:
+            d = "<:offline:813698775125983272>  Не в сети"
+
+        t = ctx.message.author.status
+        if t == discord.Status.idle:
+            d = "<:idle:813698687913295894> Не активен"
+
+        t = ctx.message.author.status
+        if t == discord.Status.dnd:
+            d = "<:dnd:813698546657787914> Не беспокоить"
+
+        emb.add_field(name="Активность:", value=d,inline=False)
+        emb.add_field(name="В discord с:", value=ctx.author.created_at + delta).strftime(timeform1))
+        emb.add_field(name="На сервере с:",value=ctx.author.joined_at + delta).strftime(timeform1),inline=False)
+        emb.add_field(name="Высшая роль на сервере:", value=f"{ctx.message.author.top_role.mention}",inline=False)
+        emb.add_field(name="`id:`", value=ctx.message.author.id,inline=False)
         emb.set_thumbnail(url=ctx.author.avatar_url)
-        emb.set_footer(text=f"Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
+        emb.set_footer(text=f"`Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
         await ctx.send(embed = emb)
     else:
         emb = discord.Embed(title='Информация о пользователе',color = member.color)
         emb.add_field(name="Имя:",value=member.display_name,inline=False)
-        emb.add_field(name="Статус:",value=member.status)
-        emb.add_field(name="В discord с:", value=member.created_at.strftime("%d.%m.%Y, %H:%M:%S"))
-        emb.add_field(name="На сервере с:",value=member.joined_at.strftime("%d.%m.%Y, %H:%M:%S"),inline=False)
+        emb.add_field(name="Статус:", value=member.activity,inline=False)
+        t = member.status
+        if t == discord.Status.online:
+            d = "<:online:813698625569947680> В сети"
+
+        t = member.status
+        if t == discord.Status.offline:
+            d = "<:offline:813698775125983272>  Не в сети"
+
+        t = member.status
+        if t == discord.Status.idle:
+            d = "<:idle:813698687913295894> Не активен"
+
+        t = member.status
+        if t == discord.Status.dnd:
+            d = "<:dnd:813698546657787914> Не беспокоить"
+        emb.add_field(name="Активность:", value=d,inline=False)
+        emb.add_field(name="В discord с:", value=member.created_at + delta).strftime(timeform1))
+        emb.add_field(name="На сервере с:",value=member.joined_at.strftime + delta).strftime(timeform1),inline=False)
+        emb.add_field(name="Высшая роль на сервере:", value=f"{member.top_role.mention}",inline=False)
         emb.add_field(name="`id:`", value=member.id,inline=False)
         emb.set_thumbnail(url=member.avatar_url)
         emb.set_footer(text=f"Использовано пользователем:\n {ctx.message.author}" ,icon_url=ctx.message.author.avatar_url)
@@ -163,7 +202,12 @@ async def serverinfo(ctx):
 async def say(ctx, *,text):
     await ctx.message.delete()
     await ctx.send(text)
-
-#client.run(config.TOKEN)
+    
+@client.command(aliases=["эмоджи","емоджи","имоджи","amogi"])
+async def emoji(ctx,emoji: discord.Emoji):
+    emb = discord.Embed(title="Информация о эмоджи:", color=ctx.message.author.color)
+    emb.add_field(name="Имя:",value=f":{emoji.name}:", inline=False)
+    emb.add_field(name="Создан:",value=(emoji.created_at + delta).strftime(timeform1),inline=False)
+    await ctx.send(embed = emb)
 token = os.environ.get("BOT_TOKEN")     
-client.run(str(token))
+bot.run(str(token))
