@@ -210,4 +210,4 @@ async def emoji(ctx,emoji: discord.Emoji):
     emb.add_field(name="Создан:",value=(emoji.created_at + delta).strftime(timeform1),inline=False)
     await ctx.send(embed = emb)
 token = os.environ.get("BOT_TOKEN")     
-bot.run(str(token))
+client.run(str(token))
