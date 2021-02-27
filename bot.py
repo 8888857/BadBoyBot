@@ -142,7 +142,7 @@ async def user(ctx,member:discord.Member= None,guild: discord.Guild = None):
             d = "<:dnd:813698546657787914> Не беспокоить"
         emb.add_field(name="Активность:", value=d,inline=False)
         emb.add_field(name="В discord с:", value=(member.created_at + delta).strftime(timeform1))
-        emb.add_field(name="На сервере с:",value=(member.joined_at.strftime + delta).strftime(timeform1),inline=False)
+        emb.add_field(name="На сервере с:",value=(member.joined_at + delta).strftime(timeform1),inline=False)
         emb.add_field(name="Высшая роль на сервере:", value=f"{member.top_role.mention}",inline=False)
         emb.add_field(name="`id:`", value=member.id,inline=False)
         emb.set_thumbnail(url=member.avatar_url)
