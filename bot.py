@@ -300,5 +300,4 @@ async def leave(ctx):
     else: 
         await ctx.send(embed=discord.Embed(title="ОШИБКА",description=f"**{ctx.message.author}**,\n эта команда только для владельца бота", colour=discord.Colour.red()))
 
-token = os.environ.get("BOT_TOKEN")     
-client.run(str(token))
+client.run(config.TOKEN)
