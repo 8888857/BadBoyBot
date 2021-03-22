@@ -1,5 +1,5 @@
 import datetime
-TOKEN = "ODEzNjkzOTYzNjk2NjAzMTQ3.YDTBjg.UcEfNFJH9sL8PuvAjE8fWtjLn0c"
+TOKEN = ""
 
 prefix = ",,"
 
