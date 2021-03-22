@@ -1,7 +1,7 @@
 import datetime
 TOKEN = ""
 
-prefix = ",,"
+prefix = ","
 
 COGS_IGNORE = ['cog.py']
 
