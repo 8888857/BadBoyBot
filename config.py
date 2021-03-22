@@ -1,5 +1,18 @@
-TOKEN = ""
+import datetime
+TOKEN = "ODEzNjkzOTYzNjk2NjAzMTQ3.YDTBjg.UcEfNFJH9sL8PuvAjE8fWtjLn0c"
+
+prefix = ",,"
+
+COGS_IGNORE = ['cog.py']
+
+COLORS = {
+    'BASE': 0xFF8000,
+    'SUCCESS': 0x80FF00,
+    'ERROR': 0xFF0700
+}
+
+timeformMSK = " %H:%M %d.%m.%Y ||`UTC(+3:00)`||"
+
+deltaMSK = datetime.timedelta(hours=3)
 
 black_list = None
-
-prefix = ","
