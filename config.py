@@ -14,4 +14,4 @@ timeformMSK = " %H:%M %d.%m.%Y ||`UTC(+3:00)`||"
 
 deltaMSK = datetime.timedelta(hours=3)
 
-black_list = None
+black_list = []
