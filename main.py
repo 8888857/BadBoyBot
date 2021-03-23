@@ -54,4 +54,4 @@ async def on_shard_disconnect(shard_id):
     discord.Webhook.partial(823524888945098812, "Kg4oKTQSzxrq7foJ0-E1NMrTJH69esLbOl1EWSnOzI-7LDTIZhQMSxzhsKwwBjq_kMsS", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"Шард с ID {shard_id} отключён",colour=config.COLORS['ERROR']))
 
 if __name__ == '__main__':
-    client.run(config.TOKEN)
+    client.run(os.environ['BADBOYBOT_TOKEN'])
