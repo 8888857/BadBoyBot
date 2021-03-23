@@ -20,9 +20,8 @@ class FeedBack(commands.Cog):
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def _idea(self, ctx, * , idea):
         prefix = config.prefix
-        if ctx.message.author.id == config.black_list:
-            await ctx.send(embed=discord.Embed(title="ОШИБКА", description=f"**{ctx.message.author}**,\n эта команда для вас заблокирована.", colour=discord.Colour.red()))
-            return
+        if ctx.author.id in config.black_list:
+            return await ctx.send(embed=discord.Embed(title="ОШИБКА", description=f"**{ctx.message.author}**,\n эта команда для вас заблокирована.", colour=discord.Colour.red()))
         else:
             emb = discord.Embed(title= f"команду {prefix}идея", description= f"**использовал:\n{ctx.author}**\n`(id-{ctx.author.id})`\nтекст:\n```\n{idea}\n```", colour=config.COLORS['BASE'])
             emb.set_footer(text = f"{ctx.guild.name}\nid-{ctx.guild.id}" if ctx.guild is not None else "~~ЛС", icon_url = ctx.guild.icon_url_as(static_format = "jpg") if ctx.guild is not None else ctx.author.avatar_url_as(static_format = "jpg"))
@@ -38,9 +37,8 @@ class FeedBack(commands.Cog):
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def _bug(self, ctx, * , bug):
         prefix = config.prefix
-        if ctx.message.author.id == config.black_list:
-            await ctx.send(embed=discord.Embed(title="ОШИБКА", description=f"**{ctx.message.author}**,\n эта команда для вас заблокирована.", colour=discord.Colour.red()))
-            return
+        if ctx.author.id in config.black_list:
+            return await ctx.send(embed=discord.Embed(title="ОШИБКА", description=f"**{ctx.message.author}**,\n эта команда для вас заблокирована.", colour=discord.Colour.red()))
         else:
             emb = discord.Embed(title= f"команду {prefix}баг", description= f"**использовал:\n{ctx.author}**\n`(id-{ctx.author.id})`\nтекст:\n```\n{bug}\n```", colour=config.COLORS['BASE'])
             emb.set_footer(text = f"{ctx.guild.name}\nid-{ctx.guild.id}" if ctx.guild is not None else "~~ЛС", icon_url = ctx.guild.icon_url_as(static_format = "jpg") if ctx.guild is not None else ctx.author.avatar_url_as(static_format = "jpg"))
