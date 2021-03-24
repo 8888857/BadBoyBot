@@ -21,6 +21,8 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
+    client.premium = [714383981952630875,361156000155172865,683308136169603123]
+    client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)
     client.eval_fn_channel = client.get_channel(816209752249597952)
@@ -54,4 +56,4 @@ async def on_shard_disconnect(shard_id):
     discord.Webhook.partial(823524888945098812, "Kg4oKTQSzxrq7foJ0-E1NMrTJH69esLbOl1EWSnOzI-7LDTIZhQMSxzhsKwwBjq_kMsS", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"Шард с ID {shard_id} отключён",colour=config.COLORS['ERROR']))
 
 if __name__ == '__main__':
-    client.run(os.environ['BADBOYBOT_TOKEN'])
+    client.run(config.TOKEN)

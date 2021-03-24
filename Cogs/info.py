@@ -1,8 +1,8 @@
 import discord
-from discord.ext import commands
 from discord import utils
-from discord.ext.commands import has_permissions
 from discord.utils import get
+from discord.ext import commands
+from discord.ext.commands import has_permissions
 import datetime
 import config
 from config import timeformMSK
@@ -35,7 +35,7 @@ class info(commands.Cog, name="Информация"):
                 colour=config.COLORS['BASE'])
             for cog in self.client.cogs:
                 cog = self.client.cogs[cog]
-                if cog.qualified_name in ["events", "owner"]:
+                if cog.qualified_name in ["events", "owner","Премиум"]:
                     continue
                 help_commands = ''
                 for command in cog.get_commands():
@@ -50,7 +50,7 @@ class info(commands.Cog, name="Информация"):
                     colour=config.COLORS['BASE'])
                 for cog in self.client.cogs:
                     cog = self.client.cogs[cog]
-                    if cog.qualified_name in ["events", "owner"]:
+                    if cog.qualified_name in ["events", "owner","Премиум"]:
                         continue
                     help_commands = ''
                     for command in cog.get_commands():
