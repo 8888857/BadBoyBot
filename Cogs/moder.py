@@ -39,23 +39,26 @@ class moder(commands.Cog, name = "Модерация"):
             await ctx.send(embed = discord.Embed(title = f"Чат успешно очищен на {len(cleared) - 1} сообщений модератором {ctx.author}", colour = config.COLORS['SUCCESS']), delete_after = 30)
         else:
             raise discord.ext.commands.errors.CheckFailure
-    
+ 
     @commands.command(
         name="сказать",
         usage="сказать (1/2) [текст]",
         description="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
         aliases=["say","озв"]
         )
-    @has_permissions(administrator=True)
-    async def _say(self, ctx, typemsg, *, text):
+    @has_permissions(administrator = True)
+    async def _say(self, ctx, typemsg, *, text=None):
         await ctx.message.delete()
-        if typemsg == "1":
-            await ctx.send(text)
-        if typemsg == "2":
-            await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
-        if typemsg != "1":
-            if typemsg != "2":
+        if text == None:
+            return await ctx.send(f"{typemsg}")
+        else:
+            if typemsg == "1":
                 await ctx.send(text)
+            if typemsg == "2":
+                  await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
+            if typemsg != "1":
+                if typemsg != "2":
+                    await ctx.send(f"{typemsg} {text}")
 
 def setup(client):
     client.add_cog(moder(client))
