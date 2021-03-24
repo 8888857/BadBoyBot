@@ -21,7 +21,7 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
-    client.premium = [714383981952630875,361156000155172865,683308136169603123]
+    client.premium = [714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)
