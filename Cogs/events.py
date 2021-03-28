@@ -37,7 +37,7 @@ class events(commands.Cog):
         elif type(error) == discord.ext.commands.errors.CommandInvokeError and type(error.original) == discord.errors.Forbidden and error.original.text == "Missing Permissions":
             return await ctx.send(embed = discord.Embed(title = "У меня недостаточно прав для выполнения данной команды", description = "Рекомендуется выдать мне права администратора для использования всего функционала бота", colour = config.COLORS['ERROR']))
         elif type(error) == discord.ext.commands.errors.MissingPermissions:
-            return await ctx.send(embed = discord.Embed(title = "У вас недостаточно прав для выполнения этой команды", description = "Необходимые права:\n" + "\n".join(Translate.permissions_in_error(error.missing_perms)), colour = config.COLORS['ERROR']))
+            return await ctx.send(embed = discord.Embed(title = "У вас недостаточно прав для выполнения этой команды", colour = config.COLORS['ERROR']))
         else:
             if ctx.author.id not in [owner.id for owner in self.client.owners]:
                 for owner in self.client.owners:

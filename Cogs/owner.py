@@ -6,6 +6,8 @@ import json
 import ast
 import requests
 import os
+from config import timeformMSK
+from config import deltaMSK
 
 class owner(commands.Cog):
     
@@ -107,6 +109,55 @@ class owner(commands.Cog):
     async def _restart(self, ctx):
         await ctx.message.add_reaction("✅")
         os.system("pm2 restart 2")
+        
+    @commands.command(
+        name="ког",
+        usage="ког [name/all] [r/l/u]",
+        description="работа с когами",
+        aliases=["cog","коги"]
+        )
+    @commands.is_owner()
+    async def _cog(self, ctx, name, act):
+        if act in ['перезагрузить','перезагрузка','релоад','reload','r','р']:
+            if name in ['all','все']:
+                for cog in os.listdir('./Cogs'):
+                    if cog not in config.COGS_IGNORE:
+                        if cog.endswith('.py'):
+                            self.client.reload_extension(f'Cogs.{cog.replace(".py", "")}')
+                await ctx.message.add_reaction('✅')
+            else:
+                self.client.reload_extension(f"Cogs.{name}")
+                await ctx.message.add_reaction('✅')
+            print("-----------------------------------")
+            print(f'ког имя="{name}" - перезагружен')
+            print("-----------------------------------")
+            
+        if act in ['вкл','включить','загрузить','загрузка','load','лоад','l','л']:
+            if name in ['all','все']:
+                for cog in os.listdir('./Cogs'):
+                    if cog not in config.COGS_IGNORE:
+                        if cog.endswith('.py'):
+                            self.client.load_extension(f'Cogs.{cog.replace(".py", "")}')
+                await ctx.message.add_reaction('✅')
+            else:
+                self.client.load_extension(f"Cogs.{name}")
+                await ctx.message.add_reaction('✅')
+            print("-----------------------------------")
+            print(f'ког имя="{name}" - загружен')
+            print("-----------------------------------")
+        if act in ['выкл','выключить','отгрузка','анлоад','unload','u','а']:
+            if name in ['all','все']:
+                for cog in os.listdir('./Cogs'):
+                    if cog not in config.COGS_IGNORE:
+                        if cog.endswith('.py'):
+                            self.client.unload_extension(f'Cogs.{cog.replace(".py", "")}')
+                await ctx.message.add_reaction('✅')
+            else:
+                self.client.unload_extension(f"Cogs.{name}")
+                await ctx.message.add_reaction('✅')
+            print("-----------------------------------")
+            print(f'ког имя="{name}" - отгружен')
+            print("-----------------------------------")
         
 def setup(client):
     client.add_cog(owner(client))

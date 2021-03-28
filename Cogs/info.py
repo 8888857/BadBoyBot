@@ -186,7 +186,6 @@ class info(commands.Cog, name="Информация"):
     async def _serverinfo(self, ctx):
       name = str(ctx.guild.name)
       description = str(ctx.guild.description)
-    
       owner = str(ctx.guild.owner)
       id = str(ctx.guild.id)
       region = str(ctx.guild.region)
@@ -251,15 +250,29 @@ class info(commands.Cog, name="Информация"):
         servers=len(self.client.guilds)
         users=len(self.client.users)
         commands=len(self.client.commands)
-    
+        time = datetime.datetime.now()
+        msg = await ctx.send(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
         emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=config.COLORS['BASE'])
         emb.add_field(name="запущен в:",value=self.client.start_time.strftime(timeformMSK))
+        emb.add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
+        emb.add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек")
         emb.add_field(name="серверов:",value=servers,inline=False)
         emb.add_field(name="пользователей:",value=users,inline=False)
         emb.add_field(name="команд:",value=commands,inline=False)
         emb.add_field(name="полезные ссылки:",value=f"сервер поддержки - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\ngithub - **[[волшебная кнопка]](https://github.com/8888857/badboybot)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
-        await ctx.send(embed=emb)
+        emb.set_thumbnail(url=self.client.user.avatar_url)
+        await msg.edit(embed=emb)
         
+    @commands.command(
+        name="пинг",
+        usage="пинг",
+        description="узнать пинг бота",
+        aliases=["ping"]
+        )
+    async def _ping(self, ctx):
+        time = datetime.datetime.now()
+        msg = await ctx.send(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        await msg.edit(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
     
     @commands.command(
         name = "канал",

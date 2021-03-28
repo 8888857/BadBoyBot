@@ -12,7 +12,7 @@ import config
 from config import timeformMSK
 from config import deltaMSK
 
-client = commands.AutoShardedBot(command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
+client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
 
 client.remove_command('help')
 
@@ -38,7 +38,7 @@ async def on_ready():
     print("---------------------")
     discord.Webhook.partial(823524857118457908,"WLGIkThKQ89Xqcczs7soJt3C9iQu8stCfeL6k88npB2S9N_eKheejLHL4eJ_ZVHt5U57", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user}\n{len(client.guilds)} серверов\nПинг: {round(client.latency, 3)} секунд\n**запущен**\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
     while True:
-          await client.change_presence(status=discord.Status.online, activity=discord.Game(",help"))
+          await client.change_presence(status=discord.Status.online, activity=discord.Game(f"{config.prefix}help"))
           await sleep(30)
           await client.change_presence(status=discord.Status.online, activity=discord.Streaming(name="свои брутальные фотки", url="https://discord.com/"))
           await sleep(15)
