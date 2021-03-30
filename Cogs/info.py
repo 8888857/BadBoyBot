@@ -228,7 +228,7 @@ class info(commands.Cog, name="Информация"):
         name="эмоджи",
         usage="эмоджи [эмоджи]",
         description="Информация о эмоджи",
-        aliases=["emoji","емоджи","имоджи","емодзи","amogi","эмоджи",])
+        aliases=["emoji","емоджи","имоджи","емодзи","amogi","эмодзи"])
     async def _emoji(self, ctx,emoji: discord.Emoji):
             emb = discord.Embed(title = f"Информация об эмоджи:\n :{emoji.name}:", colour=config.COLORS['BASE'])
             emb.add_field(name = "Анимированное", value = "Да" if emoji.animated else "Нет", inline = False)
