@@ -41,7 +41,7 @@ async def on_ready():
           await client.change_presence(status=discord.Status.online, activity=discord.Game(f"{config.prefix}help"))
           await sleep(30)
           await client.change_presence(status=discord.Status.online, activity=discord.Streaming(name="свои брутальные фотки", url="https://discord.com/"))
-          await sleep(15)
+          await sleep(30)
 
 @client.event
 async def on_disconnect():
