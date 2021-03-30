@@ -39,9 +39,9 @@ async def on_ready():
     discord.Webhook.partial(823524857118457908,"WLGIkThKQ89Xqcczs7soJt3C9iQu8stCfeL6k88npB2S9N_eKheejLHL4eJ_ZVHt5U57", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user}\n{len(client.guilds)} серверов\nПинг: {round(client.latency, 3)} секунд\n**запущен**\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
     while True:
           await client.change_presence(status=discord.Status.online, activity=discord.Game(f"{config.prefix}help"))
-          await sleep(30)
+          await asyncio.sleep(30)
           await client.change_presence(status=discord.Status.online, activity=discord.Streaming(name="свои брутальные фотки", url="https://discord.com/"))
-          await sleep(30)
+          await asyncio.sleep(30)
 
 @client.event
 async def on_disconnect():
