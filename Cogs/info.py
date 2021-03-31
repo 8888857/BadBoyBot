@@ -259,7 +259,7 @@ class info(commands.Cog, name="Информация"):
         emb.add_field(name="серверов:",value=servers,inline=False)
         emb.add_field(name="пользователей:",value=users,inline=False)
         emb.add_field(name="команд:",value=commands,inline=False)
-        emb.add_field(name="полезные ссылки:",value=f"сервер поддержки - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\ngithub - **[[волшебная кнопка]](https://github.com/8888857/badboybot)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
+        emb.add_field(name="полезные ссылки:",value=f"сервер - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
         emb.set_thumbnail(url=self.client.user.avatar_url)
         await msg.edit(embed=emb)
         
