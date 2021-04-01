@@ -25,7 +25,6 @@ async def on_ready():
     client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)
-    client.eval_fn_channel = client.get_channel(816209752249597952)
     for cog in os.listdir('./Cogs'):
         if cog not in config.COGS_IGNORE:
             if cog.endswith('.py'):
