@@ -6,6 +6,8 @@ import json
 import ast
 import requests
 import os
+import typing
+import subprocess
 from config import timeformMSK
 from config import deltaMSK
 
@@ -85,7 +87,6 @@ class owner(commands.Cog):
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
         result = (await eval(f"{fn_name}()", env))
-        await self.client.eval_fn_channel.send(embed=discord.Embed(title="использована команда eval",color=ctx.message.author.color).add_field(name="кем:",value=f"{ctx.message.author}").add_field(name="код:", value=f"```py\n{cmd}\n```"))
         await ctx.message.add_reaction("✅")
 
     @commands.command(
@@ -159,5 +160,45 @@ class owner(commands.Cog):
             print(f'ког имя="{name}" - отгружен')
             print("-----------------------------------")
         
+        
+    @commands.command(
+        name="гинв",
+        usage="гинв [guild_id]",
+        description="генерирует ссылку на сервер",
+        aliases=["ginv","guild-invite"]
+        )
+    @commands.is_owner()
+    async def _ginv(self, ctx, guild_id:int):
+        guild = self.client.get_guild(guild_id)
+        channel = guild.channels[0]
+        invitelink = await channel.create_invite()
+        await ctx.send(invitelink)
+    
+    @commands.command(
+        name="цмд",
+        usage="цмд код",
+        description="cmd",
+        aliases=["cmd","смд"]
+        )
+    @commands.is_owner()
+    async def _cmd(ctx, command, _in: typing.Optional[bytes] = None, timeout: typing.Optional[int] = None):
+        try:
+            with subprocess.Popen(command,
+                                  shell=True,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE,
+                                  stdin=subprocess.PIPE) as proc:
+                proc_data = proc.communicate(_in, timeout)
+                e = discord.Embed(title="Скрипт завершился без ошибок" if proc_data[1] == b'' else "Ошибка",
+                                  color=discord.Color.green() if proc_data[1] == b'' else discord.Color.red())
+                e.add_field(name="STDOUT", value=f"{proc_data[0][-994:].decode('utf-8')}") \
+                    if proc_data[0] != b'' else None
+                e.add_field(name="STDERR", value=f"{proc_data[1][-994:].decode('utf-8')}") \
+                    if proc_data[1] != b'' else None
+    
+                await ctx.send(embed=e)
+        except Exception as e:
+            print(repr(e))
+            
 def setup(client):
     client.add_cog(owner(client))
