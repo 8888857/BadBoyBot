@@ -179,18 +179,23 @@ class info(commands.Cog, name="Информация"):
             
     @commands.command(
         name="аватар",
-        usage="аватар (юзер)",
+        usage="аватар (юзер) (формат) (размер)",
         description="Аватар пользователя",
         aliases=["ava","ава","avatar"])
-    async def _avatar(self, ctx,member:discord.Member = None):
-        if member == None:
-            emb = discord.Embed(title=f"аватар пользователя:",description=ctx.message.author.mention,colour=config.COLORS['BASE'])
-            emb.set_image(url=ctx.message.author.avatar_url)
-            await ctx.send(embed = emb)
-        else:
-            emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
-            emb.set_image(url=member.avatar_url)
-            await ctx.send(embed = emb)
+    async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize:int = None):
+        if psize == None:
+            psize=1024
+        if psize < 1:
+            psize=1024
+        if pformat in ["webp","jpeg","jpg","png","gif",None]:
+            if member == None:
+                emb = discord.Embed(title=f"аватар пользователя:",description=ctx.message.author.mention,colour=config.COLORS['BASE'])
+                emb.set_image(url=ctx.message.author.avatar_url_as(format=pformat,size=psize))
+                await ctx.send(embed = emb)
+            else:
+                emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
+                emb.set_image(url=member.avatar_url_as(format=pformat,size=psize))
+                await ctx.send(embed = emb)
             
     @commands.command(
         name="сервер",
