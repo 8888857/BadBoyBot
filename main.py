@@ -12,7 +12,7 @@ import config
 from config import timeformMSK
 from config import deltaMSK
 
-client = commands.AutoShardedBot(shard_count=2, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
+client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
 
 client.remove_command('help')
 
