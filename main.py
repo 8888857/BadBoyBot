@@ -21,6 +21,9 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
+    client.premium_u = [714383981952630875,361156000155172865,683308136169603123,693151663321645098]
+    client.owner_g = [813511569521639474]
+    client.premium_g = [759796323569500160,707187238127009862]
     client.premium = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
@@ -38,9 +41,9 @@ async def on_ready():
     discord.Webhook.partial(823524857118457908,"WLGIkThKQ89Xqcczs7soJt3C9iQu8stCfeL6k88npB2S9N_eKheejLHL4eJ_ZVHt5U57", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user}\n{len(client.guilds)} серверов\nПинг: {round(client.latency, 3)} секунд\n**запущен**\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
     while True:
           await client.change_presence(status=discord.Status.online, activity=discord.Game(f"{config.prefix}help"))
-          await asyncio.sleep(30)
+          await sleep(30)
           await client.change_presence(status=discord.Status.online, activity=discord.Streaming(name="свои брутальные фотки", url="https://discord.com/"))
-          await asyncio.sleep(30)
+          await sleep(30)
 
 @client.event
 async def on_disconnect():
