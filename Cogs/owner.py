@@ -174,6 +174,32 @@ class owner(commands.Cog):
         channel = guild.channels[0]
         invitelink = await channel.create_invite()
         await ctx.send(invitelink)
+    
+    @commands.command(
+        name="цмд",
+        usage="цмд код",
+        description="cmd",
+        aliases=["cmd","смд"]
+        )
+    @commands.is_owner()
+    async def _cmd(ctx, command, _in: typing.Optional[bytes] = None, timeout: typing.Optional[int] = None):
+        try:
+            with subprocess.Popen(command,
+                                  shell=True,
+                                  stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE,
+                                  stdin=subprocess.PIPE) as proc:
+                proc_data = proc.communicate(_in, timeout)
+                e = discord.Embed(title="Скрипт завершился без ошибок" if proc_data[1] == b'' else "Ошибка",
+                                  color=discord.Color.green() if proc_data[1] == b'' else discord.Color.red())
+                e.add_field(name="STDOUT", value=f"{proc_data[0][-994:].decode('utf-8')}") \
+                    if proc_data[0] != b'' else None
+                e.add_field(name="STDERR", value=f"{proc_data[1][-994:].decode('utf-8')}") \
+                    if proc_data[1] != b'' else None
+    
+                await ctx.send(embed=e)
+        except Exception as e:
+            print(repr(e))
             
 def setup(client):
     client.add_cog(owner(client))
