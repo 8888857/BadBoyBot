@@ -6,6 +6,9 @@ import json
 import ast
 import requests
 import os
+import typing
+import subprocess
+import datetime
 from config import timeformMSK
 from config import deltaMSK
 
@@ -85,7 +88,6 @@ class owner(commands.Cog):
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
         result = (await eval(f"{fn_name}()", env))
-        await self.client.eval_fn_channel.send(embed=discord.Embed(title="использована команда eval",color=ctx.message.author.color).add_field(name="кем:",value=f"{ctx.message.author}").add_field(name="код:", value=f"```py\n{cmd}\n```"))
         await ctx.message.add_reaction("✅")
 
     @commands.command(
@@ -159,5 +161,19 @@ class owner(commands.Cog):
             print(f'ког имя="{name}" - отгружен')
             print("-----------------------------------")
         
+        
+    @commands.command(
+        name="гинв",
+        usage="гинв [guild_id]",
+        description="генерирует ссылку на сервер",
+        aliases=["ginv","guild-invite"]
+        )
+    @commands.is_owner()
+    async def _ginv(self, ctx, guild_id:int):
+        guild = self.client.get_guild(guild_id)
+        channel = guild.channels[0]
+        invitelink = await channel.create_invite()
+        await ctx.send(invitelink)
+            
 def setup(client):
     client.add_cog(owner(client))

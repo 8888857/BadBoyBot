@@ -109,6 +109,13 @@ class info(commands.Cog, name="Информация"):
             for flag in ctx.message.author.public_flags.all():
                 emojis_str += emojis[flag.name] + ' '
             emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
+            if ctx.author in self.client.owners:
+                emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
+            if ctx.author.id in self.client.premium_u:
+                emb.add_field(name="премиум статус:",value="**DEFAULT PREMIUM**",inline=False)
+            if ctx.author not in self.client.owners:
+                if ctx.author.id not in self.client.premium_u:
+                    emb.add_field(name="премиум статус:",value="**NO PREMIUM**",inline=False)
             emb.add_field(name="В discord с:", value=(ctx.author.created_at + deltaMSK).strftime(timeformMSK))
             emb.add_field(name="На сервере с:",value=(ctx.author.joined_at + deltaMSK).strftime(timeformMSK),inline=False)
             emb.add_field(name="Высшая роль на сервере:", value=f"{ctx.message.author.top_role.mention}",inline=False)
@@ -156,6 +163,13 @@ class info(commands.Cog, name="Информация"):
             for flag in member.public_flags.all():
                 emojis_str += emojis[flag.name] + ' '
             emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
+            if member in self.client.owners:
+                emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
+            if member.id in self.client.premium_u:
+                emb.add_field(name="премиум статус:",value="**DEFAULT PREMIUM**",inline=False)
+            if member not in self.client.owners:
+                if member.id not in self.client.premium_u:
+                    emb.add_field(name="премиум статус:",value="**NO PREMIUM**",inline=False)
             emb.add_field(name="В discord с:", value=(member.created_at + deltaMSK).strftime(timeformMSK))
             emb.add_field(name="На сервере с:",value=(member.joined_at + deltaMSK).strftime(timeformMSK),inline=False)
             emb.add_field(name="Высшая роль на сервере:", value=f"{member.top_role.mention}",inline=False)
