@@ -68,7 +68,7 @@ class moder(commands.Cog, name = "Модерация"):
         aliases=["давл","pressure"]
         )
     @has_permissions(administrator=True)
-    async def _pressure(self, ctx, systo:int, diast:int, puls:int, time=None):
+    async def _pressure(self, ctx, systo:int, diast:int, puls:int, * , time=None):
         
         min_systo = 110
         max_systo = 130
@@ -105,5 +105,66 @@ class moder(commands.Cog, name = "Модерация"):
         emb.add_field(name="Время",value=time)
         await ctx.send(embed=emb)
 
+    @commands.command(
+        name="сет_ник",
+        usage="сет_ник [юзер] [новый ник]",
+        description="смена ника",
+        aliases=["сетник","сэтник","сэт_ник","setnick","set_nick","nick","ник"]
+        )
+    async def _set_nick(self, ctx, member:discord.Member, * , new_nick):
+        if ctx.author.guild_permissions.manage_nicknames:
+            await member.edit(nick=new_nick)
+            await ctx.message.add_reaction('✅')
+    
+    @commands.command(
+        name = "кик",
+        description = "Кик пользователя",
+        aliases = ['kick'],
+        usage = "кик [юзер] (причина)"
+    )
+    @commands.guild_only()
+    @commands.has_permissions(kick_members = True)
+    async def _kick(self, ctx, member: discord.Member, *, reason = None):
+        if member.id == ctx.author.id:
+            return await ctx.send(embed = discord.Embed(title = "Вы не можете кикнуть себя", description = "Нет, я конечно всё понимаю, но кикать себя - это уже чересчур", colour = config.COLORS['ERROR']))
+        if member.top_role.position >= ctx.author.top_role.position:
+            return await ctx.send(embed = discord.Embed(title = "Вы не можете кикнуть этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
+        await member.kick(reason = f"Кик от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")
+        await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно кикнут{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+        await member.send(embed = discord.Embed(description = f"Вы были кикнуты с сервера {ctx.guild.name}{'. Причина кика не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['BASE']))
+    
+    @commands.command(
+        name = "бан",
+        description = "Бан пользователя",
+        aliases = ['ban'],
+        usage = "бан [юзер] (причина)"
+    )
+    @commands.guild_only()
+    @commands.has_permissions(ban_members = True)
+    async def _ban(self, ctx, member: discord.Member, *, reason = None):
+        if member.id == ctx.author.id:
+            return await ctx.send(embed = discord.Embed(title = "Вы не можете забанить себя", description = "Нет, я конечно всё понимаю, но банить себя - это уже чересчур", colour = config.COLORS['ERROR']))
+        if member.top_role.position >= ctx.author.top_role.position:
+            return await ctx.send(embed = discord.Embed(title = "Вы не можете забанить этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
+        await member.ban(reason = f"Бан от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")    
+        await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно забанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+        await member.send(embed = discord.Embed(description = f"Вы были забанены на сервере {ctx.guild.name}{'. Причина бана не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['BASE']))
+    
+    @commands.command(
+        name = "разбан",
+        description = "Разбан пользователя",
+        aliases = ['unban'],
+        usage = "разбан [юзер] (причина)"
+    )
+    @commands.guild_only()
+    @commands.has_permissions(ban_members = True)
+    async def _unban(self, ctx, member: discord.User, *, reason = None):
+        if member.id == ctx.author.id:
+            return await ctx.send(embed = discord.Embed(title = "Вы не можете разбанить себя", description = "Нет, я конечно всё понимаю, но разбанивать себя - очень странно...", colour = config.COLORS['ERROR']))
+        if ctx.guild.get_member(member.id) is not None:
+            return await ctx.send(embed = discord.Embed(title = "Пользователь не забанен", description = "По-моему нельзя разбанить незабаненного пользователя... Или я что-то путаю?", colour = config.COLORS['ERROR']))
+        await ctx.guild.unban(member, reason = f"Разбан от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")
+        await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно разбанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+    
 def setup(client):
     client.add_cog(moder(client))
