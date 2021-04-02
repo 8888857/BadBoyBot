@@ -32,7 +32,7 @@ class premium(commands.Cog, name="Премиум"):
             if member in self.client.owners:
                 return await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**OWNER PREMIUM**",colour=config.COLORS['BASE']))
             if member.id in self.client.premium_u:
-                return await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention};\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
+                return await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
             else:
                 await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
         else:
