@@ -43,69 +43,6 @@ class moder(commands.Cog, name = "Модерация"):
             raise discord.ext.commands.errors.CheckFailure
     
     @commands.command(
-        name="сказать",
-        usage="сказать (1/2) [текст]",
-        description="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
-        aliases=["say","озв"]
-        )
-    @has_permissions(administrator = True)
-    async def _say(self, ctx, typemsg, *, text=None):
-        await ctx.message.delete()
-        if text == None:
-            return await ctx.send(f"{typemsg}")
-        if typemsg in ["1","2","emb","емб"]:
-            if typemsg == "1":
-                await ctx.send(text)
-            else:
-                await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
-        else:
-            await ctx.send(f"{typemsg} {text}")
-
-    @commands.command(
-        name="давление",
-        usage="давление [систолическое] [диастолическое] [пульс] (время)",
-        description="выводит показания вашего давления",
-        aliases=["давл","pressure"]
-        )
-    @has_permissions(administrator=True)
-    async def _pressure(self, ctx, systo:int, diast:int, puls:int, * , time=None):
-        
-        min_systo = 110
-        max_systo = 130
-        
-        min_diast = 70
-        max_diast = 90
-        
-        min_puls = 80
-        max_puls = 100
-        
-        colors = {
-            'min':0x8BD1FF,
-            'norm':0x80FF00,
-            'max':0xFF0700
-        }
-        
-        if time == None:
-            time = datetime.datetime.now().strftime(timeformMSK)
-        
-        if (systo < min_systo
-        or diast < min_diast
-        or puls < min_puls):
-            emb=discord.Embed(colour=colors['min'])
-        if (systo > max_systo
-        or diast > max_diast
-        or puls > max_puls):
-            emb=discord.Embed(colour=colors['max'])
-        if min_systo <= systo <= max_systo:
-            if min_diast <= diast <= max_diast:
-                if min_puls <= puls <= max_puls:
-                    emb=discord.Embed(colour=colors['norm'])
-            
-        emb.add_field(name="Давление",value=f"систолическое: **{systo}**\nдиастолическое: **{diast}**\nпульс: **{puls}**")
-        emb.add_field(name="Время",value=time)
-        await ctx.send(embed=emb)
-
-    @commands.command(
         name="сет_ник",
         usage="сет_ник [юзер] [новый ник]",
         description="смена ника",

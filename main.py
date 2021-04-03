@@ -21,13 +21,13 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
-    client.premium_u = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
+    client.premium_u = [714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.owner_g = [813511569521639474]
     client.premium_g = [759796323569500160,707187238127009862]
-    client.premium = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)
+    client.review_channel = client.get_channel(827809033188278292)
     for cog in os.listdir('./Cogs'):
         if cog not in config.COGS_IGNORE:
             if cog.endswith('.py'):
