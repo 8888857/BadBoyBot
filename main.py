@@ -21,7 +21,7 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
-    client.premium_u = [714383981952630875,361156000155172865,683308136169603123,693151663321645098]
+    client.premium_u = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.owner_g = [813511569521639474]
     client.premium_g = [759796323569500160,707187238127009862]
     client.black_list = []
