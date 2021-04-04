@@ -12,7 +12,10 @@ import config
 from config import timeformMSK
 from config import deltaMSK
 
-client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
+intents = discord.Intents.default()
+intents.members = True
+
+client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents =intents, case_insensitive = True)
 
 client.remove_command('help')
 
@@ -21,7 +24,7 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
-    client.premium_u = [714383981952630875,361156000155172865,683308136169603123,693151663321645098]
+    client.premium_u = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.owner_g = [813511569521639474]
     client.premium_g = [759796323569500160,707187238127009862]
     client.black_list = []

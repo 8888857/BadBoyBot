@@ -21,7 +21,7 @@ import requests
 import urllib
 
 class utils(commands.Cog, name="Утилиты"):
-    """утил комманды:"""
+    """утилит комманды:"""
 
     def __init__(self, client):
         self.client = client
@@ -92,7 +92,6 @@ class utils(commands.Cog, name="Утилиты"):
     @commands.command(
         name="калькулятор",
         aliases=['посчитать', 'калк', 'calculator', 'calc', 'math'],
-        brief="Простейший калькулятор",
         usage="калькулятор <выражение>",
         description="Простейший математический калькулятор прямо в дискорде"
     )

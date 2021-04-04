@@ -7,7 +7,7 @@ import aiohttp
 import json
 
 class Images(commands.Cog, name = "Изображения"):
-    """Всё связанное с изображениями"""
+    """команды с картинками:"""
     def __init__(self, client):
         self.client = client
         self.some_random_api = "https://some-random-api.ml"
