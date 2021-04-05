@@ -47,12 +47,18 @@ class utils(commands.Cog, name="Утилиты"):
 
     @commands.command(
         name="давление",
-        usage="давление [систолическое] [диастолическое] [пульс] (время)",
+        usage="давление [систолическое] [диастолическое] [пульс] (delete/удалить) (время)",
         description="выводит показания вашего давления",
         aliases=["давл","pressure"]
         )
     @has_permissions(administrator=True)
-    async def _pressure(self, ctx, systo:int, diast:int, puls:int, * , time=None):
+    async def _pressure(self, ctx, systo:int, diast:int, puls:int, delete=None, * , time=None):
+        
+        if delete != None:
+            if delete in ["d","delete","удалить","у"]:
+                await ctx.message.delete()
+            else:
+                time=delete
         
         min_systo = 110
         max_systo = 130
@@ -60,7 +66,7 @@ class utils(commands.Cog, name="Утилиты"):
         min_diast = 70
         max_diast = 90
         
-        min_puls = 80
+        min_puls = 70
         max_puls = 100
         
         colors = {
