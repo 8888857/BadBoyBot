@@ -26,24 +26,6 @@ class utils(commands.Cog, name="Утилиты"):
     def __init__(self, client):
         self.client = client
         
-    @commands.command(
-        name="сказать",
-        usage="сказать (1/2) [текст]",
-        description="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
-        aliases=["say","озв"]
-        )
-    @has_permissions(administrator = True)
-    async def _say(self, ctx, typemsg, *, text=None):
-        await ctx.message.delete()
-        if text == None:
-            return await ctx.send(f"{typemsg}")
-        if typemsg in ["1","2","emb","емб"]:
-            if typemsg == "1":
-                await ctx.send(text)
-            else:
-                await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
-        else:
-            await ctx.send(f"{typemsg} {text}")
 
     @commands.command(
         name="давление",
