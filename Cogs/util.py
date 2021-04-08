@@ -35,7 +35,7 @@ class utils(commands.Cog, name="Утилиты"):
         aliases=["say","озв"]
         )
     async def _say(self, ctx, typemsg, *, text=None):
-        if (ctx.author in self.client.owner
+        if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.administrator):
             await ctx.message.delete()
             if text == None:
