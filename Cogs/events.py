@@ -18,9 +18,6 @@ class events(commands.Cog):
         if type(error) == discord.ext.commands.errors.MissingRequiredArgument:
             await ctx.message.add_reaction("❌")
             return await ctx.send(embed = discord.Embed(title = "Неверно указаны аргументы команды", description = f"Использование команды: {ctx.prefix}{ctx.command.usage}", colour = config.COLORS['ERROR']))
-        elif type(error) == discord.ext.commands.errors.CommandInvokeError:
-            await ctx.message.add_reaction("❌")
-            return await ctx.send(embed = discord.Embed(title = "Неверно указаны аргументы команды", description = f"Использование команды: {ctx.prefix}{ctx.command.usage}", colour = config.COLORS['ERROR']))
         elif type(error) == discord.ext.commands.errors.NotOwner:
             await ctx.message.add_reaction("❌")
             return await ctx.send(embed=discord.Embed(title="ошибка",description=f"{ctx.author.mention}, вы не являетесь овнером бота.\nЭта команда доступна только им",colour=config.COLORS['ERROR']))
