@@ -103,7 +103,7 @@ class owner(commands.Cog):
         else:
             guild = self.client.get_guild(guild_id)
         await guild.leave()
-        await ctx.send(embed = discord.Embed(description = f"я успешно ливнул с сервер:\n{guild.name}",colour= config.COLORS['SUCCESS']))
+        await ctx.reply(embed = discord.Embed(description = f"я успешно ливнул с сервер:\n{guild.name}",colour= config.COLORS['SUCCESS']))
     
     @commands.command(
         name="рестарт",
@@ -183,7 +183,7 @@ class owner(commands.Cog):
             guild = self.client.get_guild(guild_id)
         channel = guild.channels[0]
         invitelink = await channel.create_invite()
-        await ctx.send(invitelink)
+        await ctx.reply(invitelink)
             
 def setup(client):
     client.add_cog(owner(client))

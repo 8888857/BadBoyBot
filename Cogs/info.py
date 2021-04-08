@@ -28,7 +28,7 @@ class info(commands.Cog, name="Информация"):
         description="Помощь по командам"
     )
     async def _help(self, ctx: commands.Context, input_name = None):
-        prefix = config.prefix
+        prefix = ctx.prefix
         if input_name is None:
             embed = discord.Embed(
                 description=f"Мой префикс - `{prefix}`\nПомощь по коммандам - `{prefix}хелп [команда]`",
@@ -41,7 +41,9 @@ class info(commands.Cog, name="Информация"):
                 for command in cog.get_commands():
                     help_commands += command.qualified_name + ', '
                 embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"*`{cog.description}`*\n{re.sub(r', $', '', help_commands)}\n")
-            await ctx.send(embed=embed)
+            embed.set_thumbnail(url=self.client.user.avatar_url)
+            embed.set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.")
+            await ctx.reply(embed=embed)
         else:
             command = self.client.get_command(input_name)
             if command is None:
@@ -56,9 +58,11 @@ class info(commands.Cog, name="Информация"):
                     for command in cog.get_commands():
                         help_commands += command.qualified_name + ', '
                     embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"{cog.description}\n{re.sub(r', $', '', help_commands)}\n")
-                await ctx.send(embed=embed)
+                embed.set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.")
+                embed.set_thumbnail(url=self.client.user.avatar_url)
+                await ctx.reply(embed=embed)
             else:
-                await ctx.send(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.description}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}"))
+                await ctx.reply(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.description}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}").set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.").set_thumbnail(url=self.client.user.avatar_url))
                 
     @commands.command(
         aliases=["user","юзеринфо","userinfo","пользователь"],
@@ -68,114 +72,57 @@ class info(commands.Cog, name="Информация"):
         )
     async def _user(self, ctx,member:discord.Member= None,guild: discord.Guild = None):
         if member == None:
-            emb = discord.Embed(title='Информация о пользователе',colour = config.COLORS['BASE'])
-            if  ctx.author.name != ctx.author.display_name:
-                emb.add_field(name="Имя:",value=ctx.author.name,inline=False)
-                emb.add_field(name="Имя на сервере:",value=ctx.author.mention)
-            else:
-                emb.add_field(name="Имя:",value=ctx.author.mention,inline=False)
-            emb.add_field(name="Статус:", value=ctx.message.author.activity,inline=False)
-            t = ctx.message.author.status
-            if t == discord.Status.online:
-                d = "<:online:813698625569947680>  В сети"
-
-            t = ctx.message.author.status
-            if t == discord.Status.offline:
-                d = "<:offline:813698775125983272>  Не в сети"
-
-            t = ctx.message.author.status
-            if t == discord.Status.idle:
-                d = "<:idle:813698687913295894> Не активен"
-
-            t = ctx.message.author.status
-            if t == discord.Status.dnd:
-                d = "<:dnd:813698546657787914> Не беспокоить"
-
-            emb.add_field(name="Активность:", value=d,inline=False)
-            emojis = {
-                "staff": "<:discord_staff:777516108260704256>",
-                "partner": "<:discord_partner:777513164912328706>",
-                "bug_hunter": "<:bug_hunter:777543195483570197>",
-                "hypesquad_bravery": "<:hypesquad_bravery:777540499858653195>",
-                "hypesquad_brilliance": "<:hypesquad_brilliance:777540500035076127>",
-                "hypesquad_balance": "<:hypesquad_balance:777540500026294272>",
-                "early_supporter": "<:early_supporter:777504637094985758>",
-                "system": "<:discord:777505535930007593>",
-                "bug_hunter_level_2": "<:bug_hunter:777543195483570197>",
-                "verified_bot": "<:verified_bot:777507474017615884>",
-                "verified_bot_developer": "<:verified_bot_developer:777510397316956170>"
-            }
-            emojis_str = ''
-            for flag in ctx.message.author.public_flags.all():
-                emojis_str += emojis[flag.name] + ' '
-            emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
-            if ctx.author in self.client.owners:
-                emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
-            if ctx.author.id in self.client.premium_u:
-                emb.add_field(name="премиум статус:",value="**DEFAULT PREMIUM**",inline=False)
-            if ctx.author not in self.client.owners:
-                if ctx.author.id not in self.client.premium_u:
-                    emb.add_field(name="премиум статус:",value="**NO PREMIUM**",inline=False)
-            emb.add_field(name="В discord с:", value=(ctx.author.created_at + deltaMSK).strftime(timeformMSK))
-            emb.add_field(name="На сервере с:",value=(ctx.author.joined_at + deltaMSK).strftime(timeformMSK),inline=False)
-            emb.add_field(name="Высшая роль на сервере:", value=f"{ctx.message.author.top_role.mention}",inline=False)
-            emb.set_thumbnail(url=ctx.author.avatar_url)
-            emb.set_footer(text=f"id: {ctx.message.author.id}")
-            await ctx.send(embed = emb)
+            member = ctx.author
+        emb = discord.Embed(title='Информация о пользователе',colour = config.COLORS['BASE'])
+        if  member.name != member.display_name:
+            emb.add_field(name="Имя:",value=member.name,inline=False)
+            emb.add_field(name="Имя на сервере:",value=member.mention)
         else:
-            emb = discord.Embed(title='Информация о пользователе',colour = config.COLORS['BASE'])
-            if  member.name != member.display_name:
-                emb.add_field(name="Имя:",value=member.name,inline=False)
-                emb.add_field(name="Имя на сервере:",value=member.mention)
-            else:
-                emb.add_field(name="Имя:",value=member.mention,inline=False)
-            emb.add_field(name="Статус:", value=member.activity,inline=False)
-            t = member.status
-            if t == discord.Status.online:
-                d = "<:online:813698625569947680> В сети"
-
-            t = member.status
-            if t == discord.Status.offline:
-                d = "<:offline:813698775125983272>  Не в сети"
-
-            t = member.status
-            if t == discord.Status.idle:
-                d = "<:idle:813698687913295894> Не активен"
-
-            t = member.status
-            if t == discord.Status.dnd:
-                d = "<:dnd:813698546657787914> Не беспокоить"
-            emb.add_field(name="Активность:", value=d,inline=False)
-            emojis = {
-                "staff": "<:discord_staff:777516108260704256>",
-                "partner": "<:discord_partner:777513164912328706>",
-                "bug_hunter": "<:bug_hunter:777543195483570197>",
-                "hypesquad_bravery": "<:hypesquad_bravery:777540499858653195>",
-                "hypesquad_brilliance": "<:hypesquad_brilliance:777540500035076127>",
-                "hypesquad_balance": "<:hypesquad_balance:777540500026294272>",
-                "early_supporter": "<:early_supporter:777504637094985758>",
-                "system": "<:discord:777505535930007593>",
-                "bug_hunter_level_2": "<:bug_hunter:777543195483570197>",
-                "verified_bot": "<:verified_bot:777507474017615884>",
-                "verified_bot_developer": "<:verified_bot_developer:777510397316956170>"
-            }
-            emojis_str = ''
-            for flag in member.public_flags.all():
-                emojis_str += emojis[flag.name] + ' '
-            emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
-            if member in self.client.owners:
-                emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
-            if member.id in self.client.premium_u:
-                emb.add_field(name="премиум статус:",value="**DEFAULT PREMIUM**",inline=False)
-            if member not in self.client.owners:
-                if member.id not in self.client.premium_u:
-                    emb.add_field(name="премиум статус:",value="**NO PREMIUM**",inline=False)
-            emb.add_field(name="В discord с:", value=(member.created_at + deltaMSK).strftime(timeformMSK))
-            emb.add_field(name="На сервере с:",value=(member.joined_at + deltaMSK).strftime(timeformMSK),inline=False)
-            emb.add_field(name="Высшая роль на сервере:", value=f"{member.top_role.mention}",inline=False)
-            emb.set_thumbnail(url=member.avatar_url)
-            emb.set_footer(text=f"id: {member.id}")
-            await ctx.send(embed = emb)
+            emb.add_field(name="Имя:",value=member.mention,inline=False)
+        emb.add_field(name="Статус:", value=member.activity,inline=False)
+        t = member.status
+        if t == discord.Status.online:
+            d = "<:online:813698625569947680> В сети"
+        t = member.status
+        if t == discord.Status.offline:
+            d = "<:offline:813698775125983272>  Не в сети"
+        t = member.status
+        if t == discord.Status.idle:
+            d = "<:idle:813698687913295894> Не активен"
+        t = member.status
+        if t == discord.Status.dnd:
+            d = "<:dnd:813698546657787914> Не беспокоить"
+        emb.add_field(name="Активность:", value=d,inline=False)
+        emojis = {
+            "staff": "<:discord_staff:777516108260704256>",
+            "partner": "<:discord_partner:777513164912328706>",
+            "bug_hunter": "<:bug_hunter:777543195483570197>",
+            "hypesquad_bravery": "<:hypesquad_bravery:777540499858653195>",
+            "hypesquad_brilliance": "<:hypesquad_brilliance:777540500035076127>",
+            "hypesquad_balance": "<:hypesquad_balance:777540500026294272>",
+            "early_supporter": "<:early_supporter:777504637094985758>",
+            "system": "<:discord:777505535930007593>",
+            "bug_hunter_level_2": "<:bug_hunter:777543195483570197>",
+            "verified_bot": "<:verified_bot:777507474017615884>",
+            "verified_bot_developer": "<:verified_bot_developer:777510397316956170>"
+        }
+        emojis_str = ''
+        for flag in member.public_flags.all():
+            emojis_str += emojis[flag.name] + ' '
+        emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
+        if member in self.client.owners:
+            emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
+        if member.id in self.client.premium_u:
+            emb.add_field(name="премиум статус:",value="**DEFAULT PREMIUM**",inline=False)
+        if member not in self.client.owners:
+            if member.id not in self.client.premium_u:
+                emb.add_field(name="премиум статус:",value="**NO PREMIUM**",inline=False)
+        emb.add_field(name="В discord с:", value=(member.created_at + deltaMSK).strftime(timeformMSK))
+        emb.add_field(name="На сервере с:",value=(member.joined_at + deltaMSK).strftime(timeformMSK),inline=False)
+        emb.add_field(name="Высшая роль на сервере:", value=f"{member.top_role.mention}",inline=False)
+        emb.set_thumbnail(url=member.avatar_url)
+        emb.set_footer(text=f"id: {member.id}")
+        await ctx.reply(embed = emb)
             
     @commands.command(
         name="аватар",
@@ -189,13 +136,10 @@ class info(commands.Cog, name="Информация"):
             psize=1024
         if pformat in ["webp","jpeg","jpg","png","gif",None]:
             if member == None:
-                emb = discord.Embed(title=f"аватар пользователя:",description=ctx.message.author.mention,colour=config.COLORS['BASE'])
-                emb.set_image(url=ctx.message.author.avatar_url_as(format=pformat,size=psize))
-                await ctx.send(embed = emb)
-            else:
-                emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
-                emb.set_image(url=member.avatar_url_as(format=pformat,size=psize))
-                await ctx.send(embed = emb)
+                member = ctx.author
+            emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
+            emb.set_image(url=member.avatar_url_as(format=pformat,size=psize))
+            await ctx.reply(embed = emb)
             
     @commands.command(
         name="сервер",
@@ -241,7 +185,7 @@ class info(commands.Cog, name="Информация"):
         emb.add_field(name = "Бустеров", value = len(ctx.guild.premium_subscribers))
         emb.add_field(name = "Количество бустов", value = ctx.guild.premium_subscription_count)
       emb.set_footer(text=f"id: {ctx.guild.id}")
-      await ctx.send(embed=emb)
+      await ctx.reply(embed=emb)
 
     @commands.command(
         name="эмоджи",
@@ -256,8 +200,7 @@ class info(commands.Cog, name="Информация"):
             emb.add_field(name = "URL", value = emoji.url, inline = False)
             emb.set_image(url = emoji.url)
             emb.set_footer(text = f"ID {emoji.id}")
-    
-            await ctx.send(embed = emb)
+            await ctx.reply(embed = emb)
         
     @commands.command(
         name = "бот",
@@ -270,7 +213,7 @@ class info(commands.Cog, name="Информация"):
         users=len(self.client.users)
         commands=len(self.client.commands)
         time = datetime.datetime.now()
-        msg = await ctx.send(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        msg = await ctx.reply(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
         emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=config.COLORS['BASE'])
         emb.add_field(name="Создатель:",value=self.client.owners[1].mention)
         emb.add_field(name="Разработчик(и):",value=self.client.owners[0].mention)
@@ -293,7 +236,7 @@ class info(commands.Cog, name="Информация"):
         )
     async def _ping(self, ctx):
         time = datetime.datetime.now()
-        msg = await ctx.send(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        msg = await ctx.reply(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
         await msg.edit(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
     
     @commands.command(
@@ -333,7 +276,7 @@ class info(commands.Cog, name="Информация"):
                 embed.add_field(name = "Приглашений", value = len(invites), inline = False)
 
         embed.set_footer(text = f"ID {channel.id}")
-        await ctx.send(embed = embed)
+        await ctx.reply(embed = embed)
 
     @commands.command(
         name = "инфо-роль",
@@ -351,7 +294,7 @@ class info(commands.Cog, name="Информация"):
         embed.add_field(name = "Количество пользователей с этой ролью", value = len(role.members), inline = False)
 
         embed.set_footer(text = f"ID {role.id}")
-        await ctx.send(embed = embed)
+        await ctx.reply(embed = embed)
     
 
 def setup(client):

@@ -27,17 +27,17 @@ class moder(commands.Cog, name = "Модерация"):
         or channel.permissions_for(ctx.author).manage_messages):
             if ctx.author in self.client.owners:
                 if amount > 9999999999999999999:
-                    return await ctx.send(embed = discord.Embed(title = "Ошибка очистки чата", description = "ты даун что ли? куда тебе столько", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "ты даун что ли? куда тебе столько", colour = config.COLORS['ERROR']))
             if ctx.author.id in self.client.premium_u:
                 if amount > 5000:
-                    return await ctx.send(embed = discord.Embed(title = "Ошибка очистки чата", description = "имея **DEFAULT PREMIUM**\nНельзя очистить больше 5000 сообщений за раз", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "имея **DEFAULT PREMIUM**\nНельзя очистить больше 5000 сообщений за раз", colour = config.COLORS['ERROR']))
             else:
                 if amount > 500:
-                    return await ctx.send(embed = discord.Embed(title = "Ошибка очистки чата", description = "не имея premium\nНельзя очистить больше 500 сообщений за раз", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "не имея premium\nНельзя очистить больше 500 сообщений за раз", colour = config.COLORS['ERROR']))
             if amount <= 0:
-                return await ctx.send(embed = discord.Embed(title = "Ошибка очистки чата", description = "Очищать чат на неположительное количество сообщений? Плохая идея...", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "Очищать чат на неположительное количество сообщений? Плохая идея...", colour = config.COLORS['ERROR']))
             cleared = await channel.purge(limit = (amount + 1) if channel == ctx.channel else amount)
-            await ctx.send(embed = discord.Embed(title = f"Чат успешно очищен на {len(cleared) - 1} сообщений модератором {ctx.author}", colour = config.COLORS['SUCCESS']), delete_after = 30)
+            await ctx.reply(embed = discord.Embed(title = f"Чат успешно очищен на {len(cleared) - 1} сообщений модератором {ctx.author}", colour = config.COLORS['SUCCESS']), delete_after = 30)
         else:
             raise discord.ext.commands.errors.CheckFailure
     
@@ -51,7 +51,7 @@ class moder(commands.Cog, name = "Модерация"):
         if member == None:
             member = ctx.author
         if new_nick == None:
-            await ctx.send(embed=discord.Embed(title="Ник:",description=f"**`{member.name}`**"))
+            return await ctx.reply(embed=discord.Embed(title="Ник:",description=f"**`{member.name}`**",colour=config.COLORS['BASE']))
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.manage_nicknames):
             await member.edit(nick=new_nick)
@@ -70,11 +70,11 @@ class moder(commands.Cog, name = "Модерация"):
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.kick_members):
             if member.id == ctx.author.id:
-                return await ctx.send(embed = discord.Embed(title = "Вы не можете кикнуть себя", description = "Нет, я конечно всё понимаю, но кикать себя - это уже чересчур", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Вы не можете кикнуть себя", description = "Нет, я конечно всё понимаю, но кикать себя - это уже чересчур", colour = config.COLORS['ERROR']))
             if member.top_role.position >= ctx.author.top_role.position:
-                return await ctx.send(embed = discord.Embed(title = "Вы не можете кикнуть этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Вы не можете кикнуть этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
             await member.kick(reason = f"Кик от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")
-            await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно кикнут{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+            await ctx.reply(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно кикнут{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
             await member.send(embed = discord.Embed(description = f"Вы были кикнуты с сервера {ctx.guild.name}{'. Причина кика не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['BASE']))
         else:
             raise discord.ext.commands.errors.CheckFailure
@@ -90,11 +90,11 @@ class moder(commands.Cog, name = "Модерация"):
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.ban_members):
             if member.id == ctx.author.id:
-                return await ctx.send(embed = discord.Embed(title = "Вы не можете забанить себя", description = "Нет, я конечно всё понимаю, но банить себя - это уже чересчур", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Вы не можете забанить себя", description = "Нет, я конечно всё понимаю, но банить себя - это уже чересчур", colour = config.COLORS['ERROR']))
             if member.top_role.position >= ctx.author.top_role.position:
-                return await ctx.send(embed = discord.Embed(title = "Вы не можете забанить этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Вы не можете забанить этого пользователя", description = f"Пользователь {member.mention} обладает ролью, {'равной' if member.top_role.position == ctx.author.top_role.position else 'выше'} вашей.", colour = config.COLORS['ERROR']))
             await member.ban(reason = f"Бан от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")    
-            await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно забанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+            await ctx.reply(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно забанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
             await member.send(embed = discord.Embed(description = f"Вы были забанены на сервере {ctx.guild.name}{'. Причина бана не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['BASE']))
         else:
             raise discord.ext.commands.errors.CheckFailure
@@ -111,11 +111,11 @@ class moder(commands.Cog, name = "Модерация"):
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.ban_members):
             if member.id == ctx.author.id:
-                return await ctx.send(embed = discord.Embed(title = "Вы не можете разбанить себя", description = "Нет, я конечно всё понимаю, но разбанивать себя - очень странно...", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Вы не можете разбанить себя", description = "Нет, я конечно всё понимаю, но разбанивать себя - очень странно...", colour = config.COLORS['ERROR']))
             if ctx.guild.get_member(member.id) is not None:
-                return await ctx.send(embed = discord.Embed(title = "Пользователь не забанен", description = "По-моему нельзя разбанить незабаненного пользователя... Или я что-то путаю?", colour = config.COLORS['ERROR']))
+                return await ctx.reply(embed = discord.Embed(title = "Пользователь не забанен", description = "По-моему нельзя разбанить незабаненного пользователя... Или я что-то путаю?", colour = config.COLORS['ERROR']))
             await ctx.guild.unban(member, reason = f"Разбан от пользователя {ctx.author}{'. Причина не указана' if reason is None else ' по причине «' + reason + '»'}")
-            await ctx.send(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно разбанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
+            await ctx.reply(embed = discord.Embed(title = "Успешно", description = f"Пользователь {member} успешно разбанен{'! Причина не указана' if reason is None else ' по причине «' + reason + '»'}", colour = config.COLORS['SUCCESS']))
         else:
             raise discord.ext.commands.errors.CheckFailure
     
@@ -130,9 +130,9 @@ class moder(commands.Cog, name = "Модерация"):
             if (ctx.author in self.client.owners
             or ctx.author.guild_permissions.manage_roles):
                 if member.top_role.position > ctx.author.top_role.position:
-                    return await ctx.send(embed = discord.Embed(title = "Вы не можете изменять роли этого пользователя", description = f"Пользователь {member.mention} обладает ролью выше вашей.", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(title = "Вы не можете изменять роли этого пользователя", description = f"Пользователь {member.mention} обладает ролью выше вашей.", colour = config.COLORS['ERROR']))
                 if role == None:
-                    return await ctx.send(embed=discord.Embed(title='ошибка',description="пожалуйста введите роль которую нужно добавить/удалить",colour=config.COLORS['ERROR']))
+                    return await ctx.reply(embed=discord.Embed(title='ошибка',description="пожалуйста введите роль которую нужно добавить/удалить",colour=config.COLORS['ERROR']))
                 else:
                     if reason == None:
                         reas=f"неуказана\n{ctx.author.name} изменил роли юзеру {member.name}"
@@ -141,11 +141,11 @@ class moder(commands.Cog, name = "Модерация"):
                     if act in ['+','добавить','add']:
                         await member.add_roles(role,reason=reas)
                         await ctx.message.add_reaction('✅')
-                        await ctx.send(embed=discord.Embed(description=f"роли {member.mention} были изменены.\n{role.mention} была добавлена.",colour=config.COLORS['SUCCESS']))
+                        await ctx.reply(embed=discord.Embed(description=f"роли {member.mention} были изменены.\n{role.mention} была добавлена.",colour=config.COLORS['SUCCESS']))
                     if act in ['-','удалить','delete']:
                         await member.remove_roles(role,reason=reas)
                         await ctx.message.add_reaction('✅')
-                        await ctx.send(embed=discord.Embed(description=f"роли {member.mention} были изменены.\n{role.mention} была удалена.",colour=config.COLORS['SUCCESS']))
+                        await ctx.reply(embed=discord.Embed(description=f"роли {member.mention} были изменены.\n{role.mention} была удалена.",colour=config.COLORS['SUCCESS']))
             else:
                 raise discord.ext.commands.errors.CheckFailure
         else:

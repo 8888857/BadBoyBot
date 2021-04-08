@@ -22,7 +22,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/dog") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
     @commands.command(
         name = 'кот',
@@ -34,7 +34,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/cat") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
     @commands.command(
         name = 'птица',
@@ -46,7 +46,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/birb") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
     @commands.command(
         name = 'лиса',
@@ -58,7 +58,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/fox") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
     @commands.command(
         name = 'панда',
@@ -70,7 +70,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/panda") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
     @commands.command(
         name = 'коала',
@@ -82,7 +82,7 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/koala") as r:
                 data = await r.text()
-                await ctx.send(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(json.loads(data)['link'].replace('"', ''))
 
 
 def setup(client):

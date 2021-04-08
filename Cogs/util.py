@@ -108,16 +108,16 @@ class utils(commands.Cog, name="Утилиты"):
     async def _calculator(self, ctx, *, expression = None):
         mathjs = "http://api.mathjs.org/v4"
         if not expression:
-            return await ctx.send(embed = discord.Embed(description = "Укажите выражение, которое необходимо вычислить", colour = config.COLORS['ERROR']))
+            return await ctx.reply(embed = discord.Embed(description = "Укажите выражение, которое необходимо вычислить", colour = config.COLORS['ERROR']))
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{mathjs}?expr={expression.replace(' ', '').replace('+', '%2B').replace('/', '%2F2')}") as r:
                 r = await r.read()
                 r = r.decode('utf-8')
                 if 'Error: Undefined symbol' in r:
-                    return await ctx.send(embed = discord.Embed(description = "Неопознанный символ", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(description = "Неопознанный символ", colour = config.COLORS['ERROR']))
                 elif 'Error' in r:
-                    return await ctx.send(embed = discord.Embed(description = "Произошла непредвиденная ошибка. Повторите попытку позже.", colour = config.COLORS['ERROR']))
-                await ctx.send(f"Результат: {r}", allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = False))
+                    return await ctx.reply(embed = discord.Embed(description = "Произошла непредвиденная ошибка. Повторите попытку позже.", colour = config.COLORS['ERROR']))
+                await ctx.reply(f"Результат: {r}", allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = False))
 
     @commands.command(
         name="голосование",
@@ -169,7 +169,7 @@ class utils(commands.Cog, name="Утилиты"):
         observation = mgr.weather_at_place(city)
         w = observation.weather
         temp = str(w.temperature('celsius')['temp'])
-        await ctx.send(embed=discord.Embed(title=f"в городе {city}",colour=config.COLORS['BASE']).add_field(name="Температура:",value=f"{temp}°C").add_field(name="Погода:",value=f"{w.detailed_status}"))
+        await ctx.reply(embed=discord.Embed(title=f"в городе {city}",colour=config.COLORS['BASE']).add_field(name="Температура:",value=f"{temp}°C").add_field(name="Погода:",value=f"{w.detailed_status}"))
 
 def setup(client):
     client.add_cog(utils(client))

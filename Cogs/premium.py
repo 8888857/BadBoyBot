@@ -30,18 +30,18 @@ class premium(commands.Cog, name="Премиум"):
     async def _ups(self, ctx, member:discord.Member=None):
         if member != None:
             if member in self.client.owners:
-                return await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**OWNER PREMIUM**",colour=config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**OWNER PREMIUM**",colour=config.COLORS['BASE']))
             if member.id in self.client.premium_u:
-                return await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention};\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"премиум статус \n{member.mention};\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
             else:
-                await ctx.send(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
+                await ctx.reply(embed=discord.Embed(description=f"премиум статус \n{member.mention}:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
         else:
             if ctx.author in self.client.owners:
-                return await ctx.send(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**OWNER PREMIUM**",colour=config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**OWNER PREMIUM**",colour=config.COLORS['BASE']))
             if ctx.author.id in self.client.premium_u:
-                return await ctx.send(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**DEFAULT PREMIUM**",colour=config.COLORS['BASE']))
             else:
-                await ctx.send(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
+                await ctx.reply(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
     
     @commands.command(
         name="сервер_премиум_статус",
@@ -52,22 +52,22 @@ class premium(commands.Cog, name="Премиум"):
     async def _sps(self, ctx, guild_id:int=None):
         if guild_id == None: 
             if ctx.guild.id in self.client.owner_g:
-                return await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**OWNER GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**OWNER GUILD PREMIUM**", colour = config.COLORS['BASE']))
             if ctx.guild.id in self.client.premium_g:
-                return await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**DEFAULT GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                return await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**DEFAULT GUILD PREMIUM**", colour = config.COLORS['BASE']))
             else:
-                await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**NO GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{ ctx.guild.name}:\n**NO GUILD PREMIUM**", colour = config.COLORS['BASE']))
         else:
             if ctx.author in self.client.owners:
                 guild = self.client.get_guild(guild_id)
                 if guild_id in self.client.owner_g:
-                    return await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**OWNER GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                    return await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**OWNER GUILD PREMIUM**", colour = config.COLORS['BASE']))
                 if guild_id in self.client.premium_g:
-                    return await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**DEFAULT GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                    return await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**DEFAULT GUILD PREMIUM**", colour = config.COLORS['BASE']))
                 else:
-                    await ctx.send(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**NO GUILD PREMIUM**", colour = config.COLORS['BASE']))
+                    await ctx.reply(embed=discord.Embed(description=f"Премиум статус сервера \n{guild.name}:\n**NO GUILD PREMIUM**", colour = config.COLORS['BASE']))
             else:
-                ctx.send(embed=discord.Embed(title="ошибка",description="смотреть премиум статус определенного сервера может только овнер бота.", colour=config.COLORS['ERROR']))
+                ctx.reply(embed=discord.Embed(title="ошибка",description="смотреть премиум статус определенного сервера может только овнер бота.", colour=config.COLORS['ERROR']))
 
 
 def setup(client):
