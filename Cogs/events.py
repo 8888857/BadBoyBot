@@ -18,6 +18,12 @@ class events(commands.Cog):
         if type(error) == discord.ext.commands.errors.MissingRequiredArgument:
             await ctx.message.add_reaction("❌")
             return await ctx.send(embed = discord.Embed(title = "Неверно указаны аргументы команды", description = f"Использование команды: {ctx.prefix}{ctx.command.usage}", colour = config.COLORS['ERROR']))
+        elif type(error) == discord.ext.commands.errors.CommandInvokeError:
+            await ctx.message.add_reaction("❌")
+            return await ctx.send(embed = discord.Embed(title = "Неверно указаны аргументы команды", description = f"Использование команды: {ctx.prefix}{ctx.command.usage}", colour = config.COLORS['ERROR']))
+        elif type(error) == discord.ext.commands.errors.NotOwner:
+            await ctx.message.add_reaction("❌")
+            return await ctx.send(embed=discord.Embed(title="ошибка",description=f"{ctx.author.mention}, вы не являетесь овнером бота.\nЭта команда доступна только им",colour=config.COLORS['ERROR']))
         elif type(error) == discord.ext.commands.errors.BadUnionArgument:
             await ctx.message.add_reaction("❌")
             return await ctx.send(embed = discord.Embed(title = "Неверно указаны аргументы команды", description = f"Использование команды: {ctx.prefix}{ctx.command.usage}", colour = config.COLORS['ERROR']))
@@ -42,8 +48,10 @@ class events(commands.Cog):
         elif type(error) == discord.ext.commands.errors.RoleNotFound:
             await ctx.message.add_reaction("❌")
             return await ctx.send(embed = discord.Embed(title = "Указанная роль не найдена", colour = config.COLORS['ERROR']))
-        elif type(error) == discord.ext.commands.errors.CommandNotFound:
+        elif type(error) == discord.ext.commands.errors.EmojiNotFound:
             await ctx.message.add_reaction("❌")
+            return await ctx.send(embed = discord.Embed(title = "Указанный эмоджи не найден", colour = config.COLORS['ERROR']))
+        elif type(error) == discord.ext.commands.errors.CommandNotFound:
             return
         elif type(error) == discord.ext.commands.errors.CommandInvokeError and type(error.original) == discord.errors.Forbidden and error.original.text == "Missing Permissions":
             await ctx.message.add_reaction("❌")

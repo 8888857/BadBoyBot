@@ -24,7 +24,7 @@ class info(commands.Cog, name="Информация"):
     @commands.command(
         name="хелп",
         aliases=["help","помощь"],
-        usage="хелп [команда]",
+        usage="хелп (команда)",
         description="Помощь по командам"
     )
     async def _help(self, ctx: commands.Context, input_name = None):
@@ -58,7 +58,7 @@ class info(commands.Cog, name="Информация"):
                     embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"{cog.description}\n{re.sub(r', $', '', help_commands)}\n")
                 await ctx.send(embed=embed)
             else:
-                await ctx.send(embed = discord.Embed(title = f"Помощь по команде {command.name}", description = f"{command.description}\nАлиасы: {re.sub(r', $', '', ', '.join(command.aliases))}\nИспользование: {prefix}{command.usage}", colour = config.COLORS['BASE']))
+                await ctx.send(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.description}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}"))
                 
     @commands.command(
         aliases=["user","юзеринфо","userinfo","пользователь"],
@@ -274,14 +274,14 @@ class info(commands.Cog, name="Информация"):
         emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=config.COLORS['BASE'])
         emb.add_field(name="Создатель:",value=self.client.owners[1].mention)
         emb.add_field(name="Разработчик(и):",value=self.client.owners[0].mention)
-        emb.add_field(name="создан в:",value=(self.client.user.created_at+deltaMSK).strftime(timeformMSK))
-        emb.add_field(name="запущен в:",value=self.client.start_time.strftime(timeformMSK))
-        emb.add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
-        emb.add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек")
-        emb.add_field(name="серверов:",value=servers,inline=False)
-        emb.add_field(name="пользователей:",value=users,inline=False)
-        emb.add_field(name="команд:",value=commands,inline=False)
-        emb.add_field(name="полезные ссылки:",value=f"сервер - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
+        emb.add_field(name="Был выкован гномами(создан):",value=(self.client.user.created_at+deltaMSK).strftime(timeformMSK))
+        emb.add_field(name="Запущен:",value=self.client.start_time.strftime(timeformMSK))
+        emb.add_field(name="Ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
+        emb.add_field(name="Ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек")
+        emb.add_field(name="Серверов:",value=servers,inline=False)
+        emb.add_field(name="Пользователей:",value=users,inline=False)
+        emb.add_field(name="Команд:",value=commands,inline=False)
+        emb.add_field(name="Полезные ссылки:",value=f"сервер - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
         emb.set_thumbnail(url=self.client.user.avatar_url)
         await msg.edit(embed=emb)
         
@@ -336,12 +336,12 @@ class info(commands.Cog, name="Информация"):
         await ctx.send(embed = embed)
 
     @commands.command(
-        name = "роль",
+        name = "инфо-роль",
         description = "Информация о роли",
-        aliases = ['role', 'roleinfo'],
-        usage = "роль [Роль]"
+        aliases = ['roleinfo','role-info','инфороль'],
+        usage = "инфо-роль [роль]"
     )
-    async def _role(self, ctx, role: discord.Role):
+    async def _role(self, ctx, * ,role: discord.Role):
         embed = discord.Embed(title = f"Информация о роли {role.name}", colour = config.COLORS['BASE'])
         embed.add_field(name = "Цвет роли", value = role.color, inline = False)
         embed.add_field(name = "Роль создана", value = (role.created_at + deltaMSK).strftime(timeformMSK), inline = False)
@@ -352,6 +352,7 @@ class info(commands.Cog, name="Информация"):
 
         embed.set_footer(text = f"ID {role.id}")
         await ctx.send(embed = embed)
+    
 
 def setup(client):
     client.add_cog(info(client))
