@@ -129,17 +129,20 @@ class info(commands.Cog, name="Информация"):
         usage="аватар (юзер) (формат) (размер)",
         description="Аватар пользователя",
         aliases=["ava","ава","avatar"])
-    async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize:int = None):
+    async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize = None):
         if psize == None:
-            psize=1024
-        if psize < 1:
-            psize=1024
-        if pformat in ["webp","jpeg","jpg","png","gif",None]:
-            if member == None:
-                member = ctx.author
-            emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
-            emb.set_image(url=member.avatar_url_as(format=pformat,size=psize))
-            await ctx.reply(embed = emb)
+            psize="1024"
+        if pformat == None:
+            pformat="png"
+        if member == None:
+            member = ctx.author
+        if psize not in ["16","32","64","128","256","512","1024","2048","4096"]:
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение размера не валидно.\nможно использовать только:\n16, 32, 64, 128, 256, 512, 1024, 2048, 4096.',colour=config.COLORS['ERROR']))
+        if pformat not in ["webp","jpeg","jpg","png","gif"]:
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение формата не валидно.\nможно использовать только:\nwebp, jpeg, jpg, png, gif.',colour=config.COLORS['ERROR']))
+        emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
+        emb.set_image(url=member.avatar_url_as(format=pformat,size=int(psize)))
+        await ctx.reply(embed = emb)
             
     @commands.command(
         name="сервер",
