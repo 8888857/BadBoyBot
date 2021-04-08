@@ -31,6 +31,7 @@ async def on_ready():
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)
     client.review_channel = client.get_channel(827809033188278292)
+    client.on_off_channel = client.get_channel(813511570529320961)
     for cog in os.listdir('./Cogs'):
         if cog not in config.COGS_IGNORE:
             if cog.endswith('.py'):

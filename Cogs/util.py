@@ -34,18 +34,21 @@ class utils(commands.Cog, name="Утилиты"):
         description="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
         aliases=["say","озв"]
         )
-    @has_permissions(administrator = True)
     async def _say(self, ctx, typemsg, *, text=None):
-        await ctx.message.delete()
-        if text == None:
-            return await ctx.send(f"{typemsg}")
-        if typemsg in ["1","2","emb","емб"]:
-            if typemsg == "1":
-                await ctx.send(text)
+        if (ctx.author in self.client.owner
+        or ctx.author.guild_permissions.administrator):
+            await ctx.message.delete()
+            if text == None:
+                return await ctx.send(f"{typemsg}")
+            if typemsg in ["1","2","emb","емб"]:
+                if typemsg == "1":
+                    await ctx.send(text)
+                else:
+                    await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
             else:
-                await ctx.send(embed=discord.Embed(description=text, colour=ctx.author.color))
+                await ctx.send(f"{typemsg} {text}")
         else:
-            await ctx.send(f"{typemsg} {text}")
+            raise discord.ext.commands.errors.CheckFailure
 
     @commands.command(
         name="давление",
@@ -53,9 +56,7 @@ class utils(commands.Cog, name="Утилиты"):
         description="выводит показания вашего давления",
         aliases=["давл","pressure"]
         )
-    @has_permissions(administrator=True)
     async def _pressure(self, ctx, systo:int, diast:int, puls:int, delete=None, * , time=None):
-        
         if delete != None:
             if delete in ["d","delete","удалить","у"]:
                 await ctx.message.delete()
@@ -94,6 +95,7 @@ class utils(commands.Cog, name="Утилиты"):
                     emb=discord.Embed(colour=colors['norm'])
             
         emb.add_field(name="Давление",value=f"систолическое: **{systo}**\nдиастолическое: **{diast}**\nпульс: **{puls}**")
+        emb.set_author(name=ctx.author.name,icon_url=ctx.author.avatar_url)
         emb.add_field(name="Время",value=time)
         await ctx.send(embed=emb)
         

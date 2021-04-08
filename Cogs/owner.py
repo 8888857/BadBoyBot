@@ -97,9 +97,13 @@ class owner(commands.Cog):
         description = "бот ливнет с сервера"
         )
     @commands.is_owner()
-    async def _leave(self, ctx):
-        await ctx.guild.leave()
-        await ctx.send(embed = discord.Embed(description = "я ливнул",colour= config.COLORS['SUCCESS']))
+    async def _leave(self, ctx, guild_id:int=None):
+        if guild_id == None:
+            guild = ctx.guild
+        else:
+            guild = self.client.get_guild(guild_id)
+        await guild.leave()
+        await ctx.send(embed = discord.Embed(description = f"я успешно ливнул с сервер:\n{guild.name}",colour= config.COLORS['SUCCESS']))
     
     @commands.command(
         name="рестарт",
@@ -108,9 +112,11 @@ class owner(commands.Cog):
         aliases=["reload","restart"]
         )
     @commands.is_owner()
-    async def _restart(self, ctx):
+    async def _restart(self, ctx, id:int=None):
+        if id == None:
+            id = 1
         await ctx.message.add_reaction("✅")
-        os.system("pm2 restart 2")
+        os.system(f"pm2 restart {id}")
         
     @commands.command(
         name="ког",
@@ -133,7 +139,7 @@ class owner(commands.Cog):
             print("-----------------------------------")
             print(f'ког имя="{name}" - перезагружен')
             print("-----------------------------------")
-            
+            await self.client.on_off_channel.send(embed=discord.Embed(title="перезагружен(ы)",description=f"ког(и) «`{name}`» успешно перезагружен(ы)",colour=config.COLORS['BASE']))
         if act in ['вкл','включить','загрузить','загрузка','load','лоад','l','л']:
             if name in ['all','все']:
                 for cog in os.listdir('./Cogs'):
@@ -147,6 +153,7 @@ class owner(commands.Cog):
             print("-----------------------------------")
             print(f'ког имя="{name}" - загружен')
             print("-----------------------------------")
+            await self.client.on_off_channel.send(embed=discord.Embed(title="подгружен(ы)",description=f"ког(и) «`{name}`» успешно подгружен(ы)",colour=config.COLORS['SUCCESS']))
         if act in ['выкл','выключить','отгрузка','анлоад','unload','u','а']:
             if name in ['all','все']:
                 for cog in os.listdir('./Cogs'):
@@ -160,17 +167,20 @@ class owner(commands.Cog):
             print("-----------------------------------")
             print(f'ког имя="{name}" - отгружен')
             print("-----------------------------------")
-        
+            await self.client.on_off_channel.send(embed=discord.Embed(title="отгружен(ы)",description=f"ког(и) «`{name}`» успешно отгружен(ы)",colour=config.COLORS['ERROR']))
         
     @commands.command(
         name="гинв",
-        usage="гинв [guild_id]",
+        usage="гинв (guild_id)",
         description="генерирует ссылку на сервер",
         aliases=["ginv","guild-invite"]
         )
     @commands.is_owner()
-    async def _ginv(self, ctx, guild_id:int):
-        guild = self.client.get_guild(guild_id)
+    async def _ginv(self, ctx, guild_id:int=None):
+        if guild_id == None:
+            guild=ctx.guild
+        else:
+            guild = self.client.get_guild(guild_id)
         channel = guild.channels[0]
         invitelink = await channel.create_invite()
         await ctx.send(invitelink)
