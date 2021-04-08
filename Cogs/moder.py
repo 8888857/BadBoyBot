@@ -51,7 +51,7 @@ class moder(commands.Cog, name = "Модерация"):
         if member == None:
             member = ctx.author
         if new_nick == None:
-            await ctx.send(embed=discord.Embed(title="Ник:",description=f"**`{member.name}`**"))
+            return await ctx.send(embed=discord.Embed(title="Ник:",description=f"**`{member.name}`**",colour=config.COLORS['BASE']))
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.manage_nicknames):
             await member.edit(nick=new_nick)
