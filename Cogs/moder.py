@@ -37,7 +37,7 @@ class moder(commands.Cog, name = "Модерация"):
             if amount <= 0:
                 return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "Очищать чат на неположительное количество сообщений? Плохая идея...", colour = config.COLORS['ERROR']))
             cleared = await channel.purge(limit = (amount + 1) if channel == ctx.channel else amount)
-            await ctx.reply(embed = discord.Embed(title = f"Чат успешно очищен на {len(cleared) - 1} сообщений модератором {ctx.author}", colour = config.COLORS['SUCCESS']), delete_after = 30)
+            await ctx.send(embed = discord.Embed(title = "Успешно", colour = config.COLORS['SUCCESS']).add_field(name="Очищено:",value=f"{len(cleared) - 1} сообщение(ий)").add_field(name="Модератором:",value=f"{ctx.author.mention}"),delete_after = 15)
         else:
             raise discord.ext.commands.errors.CheckFailure
     
