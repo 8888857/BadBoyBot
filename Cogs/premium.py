@@ -44,10 +44,10 @@ class premium(commands.Cog, name="Премиум"):
                 await ctx.reply(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
     
     @commands.command(
-        name="сервер_премиум_статус",
-        usage="сервер_премиум_статус",
+        name="гуилд_премиум_статус",
+        usage="гуилд_премиум_статус",
         description="проверка статуса премиума у сервера",
-        aliases=["server_premuim_status","sps","спс"]
+        aliases=["guild_premuim_status","gps","гпс"]
         )
     async def _sps(self, ctx, guild_id:int=None):
         if guild_id == None: 
