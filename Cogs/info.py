@@ -239,7 +239,7 @@ class info(commands.Cog, name="Информация"):
         )
     async def _ping(self, ctx):
         time = datetime.datetime.now()
-        msg = await ctx.reply(title="ping", description="загрузка...",embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        msg = await ctx.reply(embed=discord.Embed(title="ping", description="загрузка...",colour=config.COLORS['SUCCESS']))
         await msg.edit(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
     
     @commands.command(
