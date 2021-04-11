@@ -46,16 +46,10 @@ class premium(commands.Cog, name="Премиум"):
     
     @commands.command(
         name="гуилд_премиум_статус",
-<<<<<<< HEAD
         usage="guild_премиум_статус",
         brief="проверка статуса премиума у сервера",
         aliases=["server_premuim_status","gps","гпс"],
         description="• гуилд_премиум_статус"
-=======
-        usage="гуилд_премиум_статус",
-        description="проверка статуса премиума у сервера",
-        aliases=["guild_premuim_status","gps","гпс"]
->>>>>>> 0150db416bfdd2b675aa363149d5d9e57c05e5ce
         )
     async def _sps(self, ctx, guild_id:int=None):
         if guild_id == None: 
