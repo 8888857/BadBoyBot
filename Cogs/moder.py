@@ -7,6 +7,7 @@ import typing
 import datetime
 from config import timeformMSK
 from config import deltaMSK
+from utils import DATABASE as DB
 
 class moder(commands.Cog, name = "Модерация"):
     """Модерационные комманды:"""
@@ -14,10 +15,36 @@ class moder(commands.Cog, name = "Модерация"):
         self.client = client
 
     @commands.command(
+        name = "префикс",
+        brief = "Установка префикса бота на сервере",
+        aliases = ['prefix'],
+        usage = "префикс (новый префикс)",
+        description="• префикс\n• префикс -_-"
+    )
+    @commands.guild_only()
+    @commands.has_permissions(administrator = True)
+    async def _prefix(Self, ctx, *, new_prefix = None):
+        if new_prefix is None:
+            current_prefix = DB.Get(ctx).prefix(None, ctx.message)
+            return await ctx.reply(embed = discord.Embed(title = "Настройка префикса", description = f"Текущий префикс бота на сервере - `{current_prefix}` Чтобы изменить его, воспользуйтесь командой {current_prefix}префикс <новый префикс>", colour = config.COLORS['BASE']))
+        else:
+            if ctx.prefix == new_prefix:
+                return await ctx.reply(embed=discord.Embed(title="ошибка",description="префикс не должен совпадать с нынешним префиксом.",colour=config.COLORS['ERROR']))
+            if ' ' in new_prefix:
+                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Префикс не должен содержать пробелы", colour = config.COLORS['ERROR']))
+            if len(new_prefix) > 5:
+                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Префикс не должен быть длиннее 4 символов", colour = config.COLORS['ERROR']))
+            if DB.Set(ctx).prefix(new_prefix):
+                return await ctx.reply(embed = discord.Embed(title = "Префикс успешно изменён", description = f"Теперь префикс бота на этом сервере - `{new_prefix}`", colour = config.COLORS['SUCCESS']))
+            else:
+                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Произошла непредвиденная ошибка при обновлении префикса. Повторите попытку позже", colour = config.COLORS['ERROR']))
+
+    @commands.command(
         name = "очистить",
-        description = "Очистка чата",
+        brief = "Очистка чата",
         aliases = ['clear','чистка'],
-        usage = "очистить [количество сообщений] (канал)"
+        usage = "очистить [количество сообщений] (канал)",
+        description="• очистить 100\n• очистить 100 #новости"
     )
     @commands.guild_only()
     async def _clear(self, ctx, amount: int, channel: discord.TextChannel = None):
@@ -37,15 +64,16 @@ class moder(commands.Cog, name = "Модерация"):
             if amount <= 0:
                 return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "Очищать чат на неположительное количество сообщений? Плохая идея...", colour = config.COLORS['ERROR']))
             cleared = await channel.purge(limit = (amount + 1) if channel == ctx.channel else amount)
-            await ctx.reply(embed = discord.Embed(title = f"Чат успешно очищен на {len(cleared) - 1} сообщений модератором {ctx.author}", colour = config.COLORS['SUCCESS']), delete_after = 30)
+            await ctx.send(embed = discord.Embed(title = "Успешно", colour = config.COLORS['SUCCESS']).add_field(name="Очищено:",value=f"{len(cleared) - 1} сообщение(ий)").add_field(name="Модератором:",value=f"{ctx.author.mention}"),delete_after = 15)
         else:
             raise discord.ext.commands.errors.CheckFailure
     
     @commands.command(
         name="сет_ник",
         usage="сет_ник (юзер) (новый ник)",
-        description="смена ника",
-        aliases=["сетник","сэтник","сэт_ник","setnick","set_nick","nick","ник"]
+        brief="смена ника",
+        aliases=["сетник","сэтник","сэт_ник","setnick","set_nick","nick","ник"],
+        description="• сет_ник\n• сет_ник @BadBoyBot#2997 БэДБойБоТиК"
         )
     async def _set_nick(self, ctx, member:discord.Member=None, * , new_nick=None):
         if member == None:
@@ -61,9 +89,10 @@ class moder(commands.Cog, name = "Модерация"):
     
     @commands.command(
         name = "кик",
-        description = "Кик пользователя",
+        brief = "Кик пользователя",
         aliases = ['kick'],
-        usage = "кик [юзер] (причина)"
+        usage = "кик [юзер] (причина)",
+        description="• кик @BadBoyBot#2997\n• кик @BadBoyBot#2997 веская причина"
     )
     @commands.guild_only()
     async def _kick(self, ctx, member: discord.Member, *, reason = None):
@@ -81,9 +110,10 @@ class moder(commands.Cog, name = "Модерация"):
     
     @commands.command(
         name = "бан",
-        description = "Бан пользователя",
+        brief = "Бан пользователя",
         aliases = ['ban'],
-        usage = "бан [юзер] (причина)"
+        usage = "бан [юзер] (причина)",
+        description="• бан @BadBoyBot#2997\n• бан @BadBoyBot#2997 веская причина"
     )
     @commands.guild_only()
     async def _ban(self, ctx, member: discord.Member, *, reason = None):
@@ -101,12 +131,12 @@ class moder(commands.Cog, name = "Модерация"):
     
     @commands.command(
         name = "разбан",
-        description = "Разбан пользователя",
+        brief = "Разбан пользователя",
         aliases = ['unban'],
-        usage = "разбан [юзер] (причина)"
+        usage = "разбан [юзер] (причина)",
+        description="• разбан @BadBoyBot#2997\n• разбан @BadBoyBot#2997 веская причина"
     )
     @commands.guild_only()
-    @commands.has_permissions(ban_members = True)
     async def _unban(self, ctx, member: discord.User, *, reason = None):
         if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.ban_members):
@@ -122,8 +152,9 @@ class moder(commands.Cog, name = "Модерация"):
     @commands.command(
         name="роль",
         usage="роль [юзер] [+/-|добавить/удалить] [роль] (причина)",
-        description="добавление/удаление ролей",
-        aliases=['role','роли','roles']
+        brief="добавление/удаление ролей",
+        aliases=['role','роли','roles'],
+        description="• роль @BadBoyBot#2997 + @супер_пупер_роль\n• роль @BadBoyBot#2997 - @супер_пупер_роль\n• роль @BadBoyBot#2997 добавить @супер_пупер_роль супер причина :>"
         )
     async def _role(self, ctx, member:discord.Member, act, role:discord.Role, * ,reason=None):
         if act in ['+','-','удалить','добавить','delete','add']:

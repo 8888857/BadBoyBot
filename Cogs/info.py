@@ -11,6 +11,7 @@ import aiohttp
 import os
 import re
 import asyncio
+from utils import DATABASE as DB
 from asyncio import sleep
 import ast
 import typing
@@ -25,10 +26,11 @@ class info(commands.Cog, name="Информация"):
         name="хелп",
         aliases=["help","помощь"],
         usage="хелп (команда)",
-        description="Помощь по командам"
+        brief="Помощь по командам",
+        description=f"• хелп\n• хелп юзеринфо"
     )
     async def _help(self, ctx: commands.Context, input_name = None):
-        prefix = ctx.prefix
+        prefix = DB.Get(ctx).prefix(None, ctx.message)
         if input_name is None:
             embed = discord.Embed(
                 description=f"Мой префикс - `{prefix}`\nПомощь по коммандам - `{prefix}хелп [команда]`",
@@ -62,13 +64,14 @@ class info(commands.Cog, name="Информация"):
                 embed.set_thumbnail(url=self.client.user.avatar_url)
                 await ctx.reply(embed=embed)
             else:
-                await ctx.reply(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.description}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}").set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.").set_thumbnail(url=self.client.user.avatar_url))
+                await ctx.reply(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.brief}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}").add_field(name="Примеры:",value=f"```\n{command.description}\n```").set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.").set_thumbnail(url=self.client.user.avatar_url))
                 
     @commands.command(
         aliases=["user","юзеринфо","userinfo","пользователь"],
         name="юзер",
         usage="юзер (юзер)",
-        description="Информация о юзере"
+        brief="Информация о юзере",
+        description="• юзер\n• юзер @BadBoyBot#2997"
         )
     async def _user(self, ctx,member:discord.Member= None,guild: discord.Guild = None):
         if member == None:
@@ -127,25 +130,33 @@ class info(commands.Cog, name="Информация"):
     @commands.command(
         name="аватар",
         usage="аватар (юзер) (формат) (размер)",
-        description="Аватар пользователя",
-        aliases=["ava","ава","avatar"])
-    async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize:int = None):
+        brief="Аватар пользователя",
+        aliases=["ava","ава","avatar"],
+        description="• аватар\n• аватар @BadBoyBot#2997\n• аватар @BadBoyBot#2997 png\n• аватар @BadBoyBot#2997 png 1024"
+        )
+    async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize = None):
         if psize == None:
-            psize=1024
-        if psize < 1:
-            psize=1024
-        if pformat in ["webp","jpeg","jpg","png","gif",None]:
-            if member == None:
-                member = ctx.author
-            emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
-            emb.set_image(url=member.avatar_url_as(format=pformat,size=psize))
-            await ctx.reply(embed = emb)
-            
+            psize="1024"
+        if pformat == None:
+            pformat="png"
+        if member == None:
+            member = ctx.author
+        if psize not in ["16","32","64","128","256","512","1024","2048","4096"]:
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение размера не валидно.\nможно использовать только:\n16, 32, 64, 128, 256, 512, 1024, 2048, 4096.',colour=config.COLORS['ERROR']))
+        if pformat not in ["webp","jpeg","jpg","png","gif"]:
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение формата не валидно.\nможно использовать только:\nwebp, jpeg, jpg, png, gif.',colour=config.COLORS['ERROR']))
+        emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
+        emb.set_image(url=member.avatar_url_as(format=pformat,size=int(psize)))
+        await ctx.reply(embed = emb)
+    
     @commands.command(
         name="сервер",
         usage="сервер",
-        description="Информация о сервере",
-        aliases=["server","infoserver","serverinfo","серв","серверинфо","serv"])
+        brief="Информация о сервере",
+        aliases=["server","infoserver","serverinfo","серв","серверинфо","serv"],
+        description="• сервер"
+        )
+    @commands.guild_only()
     async def _serverinfo(self, ctx):
       name = str(ctx.guild.name)
       description = str(ctx.guild.description)
@@ -190,8 +201,10 @@ class info(commands.Cog, name="Информация"):
     @commands.command(
         name="эмоджи",
         usage="эмоджи [эмоджи]",
-        description="Информация о эмоджи",
-        aliases=["emoji","емоджи","имоджи","емодзи","amogi","эмодзи"])
+        brief="Информация о эмоджи",
+        aliases=["emoji","емоджи","имоджи","емодзи","amogi","эмодзи"],
+        description="• эмоджи 😎"
+        )
     async def _emoji(self, ctx,emoji: discord.Emoji):
             emb = discord.Embed(title = f"Информация об эмоджи:\n :{emoji.name}:", colour=config.COLORS['BASE'])
             emb.add_field(name = "Анимированное", value = "Да" if emoji.animated else "Нет", inline = False)
@@ -206,17 +219,19 @@ class info(commands.Cog, name="Информация"):
         name = "бот",
         usage="бот",
         aliases = ["bot", "ботинок","ботинфо","botinfo"],
-        description = "Информация о боте"
+        brief = "Информация о боте",
+        description="• бот"
         )
     async def _bot(self, ctx):
         servers=len(self.client.guilds)
         users=len(self.client.users)
         commands=len(self.client.commands)
         time = datetime.datetime.now()
-        msg = await ctx.reply(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        msg = await ctx.reply(embed=discord.Embed(title="bot", description="загрузка...",colour=config.COLORS['SUCCESS']))
         emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=config.COLORS['BASE'])
         emb.add_field(name="Создатель:",value=self.client.owners[1].mention)
-        emb.add_field(name="Разработчик(и):",value=self.client.owners[0].mention)
+        emb.add_field(name="Разработчик(и):",
+        value=self.client.owners[0].mention)
         emb.add_field(name="Был выкован гномами(создан):",value=(self.client.user.created_at+deltaMSK).strftime(timeformMSK))
         emb.add_field(name="Запущен:",value=self.client.start_time.strftime(timeformMSK))
         emb.add_field(name="Ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
@@ -231,19 +246,21 @@ class info(commands.Cog, name="Информация"):
     @commands.command(
         name="пинг",
         usage="пинг",
-        description="узнать пинг бота",
-        aliases=["ping"]
+        brief="узнать пинг бота",
+        aliases=["ping"],
+        description="• пинг"
         )
     async def _ping(self, ctx):
         time = datetime.datetime.now()
-        msg = await ctx.reply(embed=discord.Embed(colour=config.COLORS['SUCCESS']))
+        msg = await ctx.reply(embed=discord.Embed(title="ping", description="загрузка...",colour=config.COLORS['SUCCESS']))
         await msg.edit(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
     
     @commands.command(
         name = "канал",
-        description = "Информация о канале",
+        brief = "Информация о канале",
         aliases = ['channel', 'channelinfo'],
-        usage = "канал (канал)"
+        usage = "канал (канал)",
+        description="• канал\n• канал #новости"
     )
     async def _channel(self, ctx, channel: typing.Union[discord.TextChannel, discord.VoiceChannel] = None):
         if channel is None: 
@@ -280,9 +297,10 @@ class info(commands.Cog, name="Информация"):
 
     @commands.command(
         name = "инфо-роль",
-        description = "Информация о роли",
+        brief = "Информация о роли",
         aliases = ['roleinfo','role-info','инфороль'],
-        usage = "инфо-роль [роль]"
+        usage = "инфо-роль [роль]",
+        description="• инфо роль @супер_пупер_роль"
     )
     async def _role(self, ctx, * ,role: discord.Role):
         embed = discord.Embed(title = f"Информация о роли {role.name}", colour = config.COLORS['BASE'])

@@ -16,7 +16,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'пёс',
         aliases = ['собака', 'пес', 'dog'],
         usage = "пёс",
-        description = "Показывает случайное изображение собаки"
+        brief = "Показывает случайное изображение собаки",
+        description="• пёс"
     )
     async def _dog(self, ctx):
         async with aiohttp.ClientSession() as cs:
@@ -28,7 +29,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'кот',
         aliases = ['кошка', 'cat'],
         usage = "кот",
-        description = "Показывает случайное изображение кота"
+        brief = "Показывает случайное изображение кота",
+        description = "• кот"
     )
     async def _cat(self, ctx):
         async with aiohttp.ClientSession() as cs:
@@ -40,7 +42,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'птица',
         aliases = ['bird'],
         usage = "птица",
-        description = "Показывает случайное изображение птицы"
+        brief = "Показывает случайное изображение птицы",
+        description="• птица"
     )
     async def _bird(self, ctx):
         async with aiohttp.ClientSession() as cs:
@@ -52,7 +55,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'лиса',
         aliases = ['fox'],
         usage = "лиса",
-        description = "Показывает случайное изображение лисы"
+        brief = "Показывает случайное изображение лисы",
+        description="• лиса"
     )
     async def _bird(self, ctx):
         async with aiohttp.ClientSession() as cs:
@@ -64,7 +68,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'панда',
         aliases = ['panda'],
         usage = "панда",
-        description = "Показывает случайное изображение панды"
+        brief = "Показывает случайное изображение панды",
+        description="• панда"
     )
     async def _panda(self, ctx):
         async with aiohttp.ClientSession() as cs:
@@ -76,7 +81,8 @@ class Images(commands.Cog, name = "Изображения"):
         name = 'коала',
         aliases = ['coala', 'koala'],
         usage = "коала",
-        description = "Показывает случайное изображение коалы"
+        brief = "Показывает случайное изображение коалы",
+        description="• коала"
     )
     async def _koala(self, ctx):
         async with aiohttp.ClientSession() as cs:

@@ -31,11 +31,12 @@ class utils(commands.Cog, name="Утилиты"):
     @commands.command(
         name="сказать",
         usage="сказать (1/2) [текст]",
-        description="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
-        aliases=["say","озв"]
+        brief="Писать от имени бота\n`( 1-просто сообщение, 2-сообщение в рамочке(ембед))`",
+        aliases=["say","озв"],
+        description="• сказать я бот\n• сказать 1 я бот\n• сказать 2 я бот"
         )
     async def _say(self, ctx, typemsg, *, text=None):
-        if (ctx.author in self.client.owner
+        if (ctx.author in self.client.owners
         or ctx.author.guild_permissions.administrator):
             await ctx.message.delete()
             if text == None:
@@ -53,12 +54,13 @@ class utils(commands.Cog, name="Утилиты"):
     @commands.command(
         name="давление",
         usage="давление [систолическое] [диастолическое] [пульс] (delete/удалить) (время)",
-        description="выводит показания вашего давления",
-        aliases=["давл","pressure"]
+        brief="выводит показания вашего давления",
+        aliases=["давл","pressure"],
+        description="• давление 120 80 90\n• давление 120 80 90 delete\n• давление 120 80 90 delete 12:40\n• давление 120 80 90 12:40"
         )
     async def _pressure(self, ctx, systo:int, diast:int, puls:int, delete=None, * , time=None):
         if delete != None:
-            if delete in ["d","delete","удалить","у"]:
+            if delete in ["d","delete","удалить","у","-"]:
                 await ctx.message.delete()
             else:
                 time=delete
@@ -103,7 +105,8 @@ class utils(commands.Cog, name="Утилиты"):
         name="калькулятор",
         aliases=['посчитать', 'калк', 'calculator', 'calc', 'math'],
         usage="калькулятор <выражение>",
-        description="Простейший математический калькулятор прямо в дискорде"
+        brief="Простейший математический калькулятор прямо в дискорде",
+        description="• калькулятор 1+1"
     )
     async def _calculator(self, ctx, *, expression = None):
         mathjs = "http://api.mathjs.org/v4"
@@ -122,8 +125,9 @@ class utils(commands.Cog, name="Утилиты"):
     @commands.command(
         name="голосование",
         usage="голосование [кол-во реакций] [тема]",
-        description="создает голосование",
-        aliases=["vote"]
+        brief="создает голосование",
+        aliases=["vote"],
+        description="• голосование 2 я крутой?\n1- да\n2- нет"
         )
     async def _vote(self, ctx, quantity:int, * ,topic):
         if (quantity <= 0
@@ -158,8 +162,9 @@ class utils(commands.Cog, name="Утилиты"):
     @commands.command(
         name="погода",
         usage="погода [город]",
-        description="узнать погоду в определенном городе",
-        aliases=["weather"]
+        brief="узнать погоду в определенном городе",
+        aliases=["weather"],
+        description="• погода Москва"
         )
     async def _weather(self, ctx, * ,city):
         config_dict = get_default_config()
@@ -168,8 +173,18 @@ class utils(commands.Cog, name="Утилиты"):
         mgr = owm.weather_manager()
         observation = mgr.weather_at_place(city)
         w = observation.weather
-        temp = str(w.temperature('celsius')['temp'])
-        await ctx.reply(embed=discord.Embed(title=f"в городе {city}",colour=config.COLORS['BASE']).add_field(name="Температура:",value=f"{temp}°C").add_field(name="Погода:",value=f"{w.detailed_status}"))
+        temp = w.temperature('celsius')['temp']
+        icon = w.weather_icon_url(size='2x')
+        wih = w.wind()['speed']
+#        humi = w.humidity()['humidity']
+        emb=discord.Embed(title=f"в городе {city}",colour=config.COLORS['BASE'])
+        emb.add_field(name="Температура:",value=f"{temp}°C")
+#        emb.add_field(name="Влажность:",value=f"{str(humi)}%")
+        emb.add_field(name="Скорость ветра:",value=f"{wih}м/с")
+        emb.add_field(name="Погода:",value=f"{w.detailed_status}")
+        emb.set_thumbnail(url=icon)
+        
+        await ctx.reply(embed=emb)
 
 def setup(client):
     client.add_cog(utils(client))

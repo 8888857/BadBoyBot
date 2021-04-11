@@ -9,6 +9,7 @@ import os
 import typing
 import subprocess
 import datetime
+from utils import DATABASE as DB
 from config import timeformMSK
 from config import deltaMSK
 
@@ -37,7 +38,8 @@ class owner(commands.Cog):
         name="евал",
         aliases = ['eval'],
         usage="евал [код]",
-        description="исполнение кусков кода"
+        brief="исполнение кусков кода",
+        description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
     async def eval_fn(self, ctx, *, cmd):
@@ -82,7 +84,7 @@ class owner(commands.Cog):
             'commands': commands,
             'ctx': ctx,
             '__import__': __import__,
-#            'DB': DB,
+            'DB': DB,
             'os': os,
         }
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
@@ -94,7 +96,8 @@ class owner(commands.Cog):
         name = "ливай",
         aliases = ['leave'],
         usage="ливай (сервер)",
-        description = "бот ливнет с сервера"
+        brief = "бот ливнет с сервера",
+        description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
     async def _leave(self, ctx, guild_id:int=None):
@@ -108,8 +111,9 @@ class owner(commands.Cog):
     @commands.command(
         name="рестарт",
         usage="рестарт",
-        description="перезагружает бота",
-        aliases=["reload","restart"]
+        brief="перезагружает бота",
+        aliases=["reload","restart"],
+        description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
     async def _restart(self, ctx, id:int=None):
@@ -121,8 +125,9 @@ class owner(commands.Cog):
     @commands.command(
         name="ког",
         usage="ког [name/all] [r/l/u]",
-        description="работа с когами",
-        aliases=["cog","коги"]
+        brief="работа с когами",
+        aliases=["cog","коги"],
+        description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
     async def _cog(self, ctx, name, act):
@@ -172,8 +177,9 @@ class owner(commands.Cog):
     @commands.command(
         name="гинв",
         usage="гинв (guild_id)",
-        description="генерирует ссылку на сервер",
-        aliases=["ginv","guild-invite"]
+        brief="генерирует ссылку на сервер",
+        aliases=["ginv","guild-invite"],
+        description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
     async def _ginv(self, ctx, guild_id:int=None):

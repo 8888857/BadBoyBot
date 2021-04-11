@@ -14,8 +14,9 @@ class FeedBack(commands.Cog):
     @commands.command(
         name="идея",
         usage="идея [идея]",
-        description="Написать идею",
-        aliases=["idea"]
+        brief="Написать идею",
+        aliases=["idea"],
+        description="• идея сделать кулдаун на команду идея меньше"
         )
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def _idea(self, ctx, * , idea):
@@ -34,8 +35,9 @@ class FeedBack(commands.Cog):
     @commands.command(
         name="баг",
         usage="баг [баг]",
-        description="Репорт бага",
-        aliases=["bug","багулина"]
+        brief="Репорт бага",
+        aliases=["bug","багулина"],
+        description="• баг можно пинговать через say"
         )
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def _bug(self, ctx, * , bug):
@@ -54,8 +56,9 @@ class FeedBack(commands.Cog):
     @commands.command(
         name="отзыв",
         usage="отзыв [отзыв]",
-        description="отзыв о боте",
-        aliases=["review"]
+        brief="отзыв о боте",
+        aliases=["review"],
+        description="• отзыв хороший бот 100500/10"
         )
     @commands.cooldown(1, 120, commands.BucketType.user)
     async def _rewiew(self, ctx, * , review):

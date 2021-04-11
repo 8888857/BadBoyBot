@@ -2,6 +2,7 @@ import discord
 from discord import utils
 from discord.ext import commands
 from discord.ext.commands import has_permissions
+from utils import DATABASE as DB
 from discord.utils import get
 import os
 import asyncio
@@ -12,10 +13,7 @@ import config
 from config import timeformMSK
 from config import deltaMSK
 
-intents = discord.Intents.default()
-intents.members = True
-
-client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents =intents, case_insensitive = True)
+client = commands.AutoShardedBot(shard_count=1, command_prefix = DB.Get().prefix,  intents = discord.Intents.all(), case_insensitive = True)
 
 client.remove_command('help')
 
@@ -24,9 +22,9 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
-    client.premium_u = [711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
+    client.premium_u = [511508551492173836,711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.owner_g = [813511569521639474]
-    client.premium_g = [759796323569500160,707187238127009862]
+    client.premium_g = [828067961934839861,759796323569500160,707187238127009862]
     client.black_list = []
     client.idea_channel = client.get_channel(813511569795055634)
     client.bug_channel = client.get_channel(813511569795055635)

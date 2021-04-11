@@ -25,7 +25,8 @@ class premium(commands.Cog, name="Премиум"):
         name="юзер_премиум_статус",
         usage="юзер_премиум_статус (юзер)",
         aliases=["user_premium_status","ups","юпс"],
-        description="проверка статуса премиума у юзера"
+        brief="проверка статуса премиума у юзера",
+        description="• юзер_премиум_статус\n• юзер_премиум_статус @BadBoyBot#2997"
         )
     async def _ups(self, ctx, member:discord.Member=None):
         if member != None:
@@ -44,10 +45,11 @@ class premium(commands.Cog, name="Премиум"):
                 await ctx.reply(embed=discord.Embed(description=f"{ctx.author.mention},\nваш премиум статус:\n**NO PREMIUM**",colour=config.COLORS['BASE']))
     
     @commands.command(
-        name="сервер_премиум_статус",
-        usage="сервер_премиум_статус",
-        description="проверка статуса премиума у сервера",
-        aliases=["server_premuim_status","sps","спс"]
+        name="гуилд_премиум_статус",
+        usage="guild_премиум_статус",
+        brief="проверка статуса премиума у сервера",
+        aliases=["server_premuim_status","gps","гпс"],
+        description="• гуилд_премиум_статус"
         )
     async def _sps(self, ctx, guild_id:int=None):
         if guild_id == None: 
