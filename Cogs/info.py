@@ -130,15 +130,10 @@ class info(commands.Cog, name="Информация"):
     @commands.command(
         name="аватар",
         usage="аватар (юзер) (формат) (размер)",
-<<<<<<< HEAD
         brief="Аватар пользователя",
         aliases=["ava","ава","avatar"],
         description="• аватар\n• аватар @BadBoyBot#2997\n• аватар @BadBoyBot#2997 png\n• аватар @BadBoyBot#2997 png 1024"
         )
-=======
-        description="Аватар пользователя",
-        aliases=["ava","ава","avatar"])
->>>>>>> 0150db416bfdd2b675aa363149d5d9e57c05e5ce
     async def _avatar(self, ctx,member:discord.Member = None, pformat=None, psize = None):
         if psize == None:
             psize="1024"
@@ -153,11 +148,7 @@ class info(commands.Cog, name="Информация"):
         emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
         emb.set_image(url=member.avatar_url_as(format=pformat,size=int(psize)))
         await ctx.reply(embed = emb)
-<<<<<<< HEAD
-    
-=======
-            
->>>>>>> 0150db416bfdd2b675aa363149d5d9e57c05e5ce
+
     @commands.command(
         name="сервер",
         usage="сервер",
