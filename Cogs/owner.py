@@ -116,10 +116,10 @@ class owner(commands.Cog):
         description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
-    async def _restart(self, ctx, id:int=None):
+    async def _restart(self, ctx, id=None):
         if id == None:
-            id = 1
-        await ctx.message.add_reaction("✅")
+            id = badboybot
+        await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
         os.system(f"pm2 restart {id}")
         
     @commands.command(
