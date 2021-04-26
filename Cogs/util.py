@@ -188,21 +188,6 @@ class utils(commands.Cog, name="Утилиты"):
         
         await ctx.reply(embed=emb)
 
-    @commands.command(
-        name="рандом",
-        usage="рандом (от) (до)",
-        brief="генератор рандомных чисел",
-        aliases=["random"],
-        description="• рандом\n• рандом 20\n• рандом 20 40"
-        )
-    async def _random(self, ctx, start:int=None, finish:int=None):
-        if start == None:
-            rnumber = random.randint(-99999999, 999999999999999999999999999999999999)
-        else:
-            if finish == None:
-                rnumber = random.randint(start, 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)
-            else:
-                rnumber = random.randint(start, finish)
-        await ctx.reply(embed=discord.Embed(title="выпало число:", description=rnumber,colour=discord.Colour.random()))
+
 def setup(client):
     client.add_cog(utils(client))
