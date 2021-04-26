@@ -18,6 +18,7 @@ import json
 import requests
 from bs4 import BeautifulSoup
 import requests
+import random
 import urllib
 import pyowm
 from pyowm.utils.config import get_default_config
