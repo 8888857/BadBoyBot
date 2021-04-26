@@ -39,34 +39,25 @@ async def on_ready():
         'BASE': 0xFF8000,
         'SUCCESS': 0x80FF00,
         'ERROR': 0xFF0700,
-        
-        
         'red': 0xff1a1a,
         'dark_red': 0x992d22,
-        
         'blue': 0x00ccff,
         'dark_blue': 0x206694,
-        
         'orange': 0xff9100,
         'dark_orange': 0xa84300,
-        
         'purple': 0x9b00ff,
         'dark_purple': 0x71368a,
-        
         'green': 0x22ff00,
         'dark_green': 0x1f8b4c,
-        
         'teel': 0x1abc9c,
         'dark_teel': 0x11806a,
-        
         'grey': 0x979c9f,
-        'dark_grey': 0x607d8b, 
-        
+        'dark_grey': 0x607d8b,
         'magenta': 0xe91e63, 
         'dark_magenta': 0xad1457,
-        
         'gold': 0xf1c40f,
-        'dark_gold': 0xc27c0e
+        'dark_gold': 0xc27c0e,
+        'random': discord.Colour.random()
     }
     client.EMOJIS = {
         'SUCCESS': client.get_emoji(835420636490235905),
