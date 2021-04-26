@@ -174,17 +174,34 @@ class utils(commands.Cog, name="Утилиты"):
         observation = mgr.weather_at_place(city)
         w = observation.weather
         temp = w.temperature('celsius')['temp']
+        tempfeellike = w.temperature('celsius')['feels_like']
         icon = w.weather_icon_url(size='2x')
-        wih = w.wind()['speed']
-#        humi = w.humidity()['humidity']
-        emb=discord.Embed(title=f"в городе {city}",colour=config.COLORS['BASE'])
+        wind = w.wind()['speed']
+        emb=discord.Embed(title=f"в городе __**{city}**__",colour=config.COLORS['BASE'])
         emb.add_field(name="Температура:",value=f"{temp}°C")
-#        emb.add_field(name="Влажность:",value=f"{str(humi)}%")
-        emb.add_field(name="Скорость ветра:",value=f"{wih}м/с")
+        if tempfeellike != temp:
+            emb.add_field(name="Температура ощущается как:",value=f"{tempfeellike}°C")
+        emb.add_field(name="Скорость ветра:",value=f"{wind}м/с")
         emb.add_field(name="Погода:",value=f"{w.detailed_status}")
         emb.set_thumbnail(url=icon)
         
         await ctx.reply(embed=emb)
 
+    @commands.command(
+        name="рандом",
+        usage="рандом (от) (до)",
+        brief="генератор рандомных чисел",
+        aliases=["random"],
+        description="• рандом\n• рандом 20\n• рандом 20 40"
+        )
+    async def _random(self, ctx, start:int=None, finish:int=None):
+        if start == None:
+            rnumber = random.randint(-99999999, 999999999999999999999999999999999999)
+        else:
+            if finish == None:
+                rnumber = random.randint(start, 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)
+            else:
+                rnumber = random.randint(start, finish)
+        await ctx.reply(embed=discord.Embed(title="выпало число:", description=rnumber,colour=discord.Colour.random()))
 def setup(client):
     client.add_cog(utils(client))
