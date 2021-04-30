@@ -188,6 +188,7 @@ class utils(commands.Cog, name="Утилиты"):
         
         await ctx.reply(embed=emb)
 
+
     @commands.command(
         name="рандом",
         usage="рандом (от) (до)",
@@ -197,16 +198,27 @@ class utils(commands.Cog, name="Утилиты"):
         )
     async def _random(self, ctx, start:int=None, finish:int=None):
         if start == None:
-            rnumber = random.randint(-99999999, 999999999999999999999999999999999999)
+            rnumber = random.randint(0, 10)
         else:
             if finish == None:
-                rnumber = random.randint(start, 999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999)
+                rnumber = random.randint(start, start+10)
             else:
                 if start >= finish:
                     rnumber = random.randint(finish, start)
                 else:
                     rnumber = random.randint(start, finish)
-        await ctx.reply(embed=discord.Embed(title="выпало число:", description=f"**{rnumber}**",colour=discord.Colour.random()))
+        await ctx.reply(embed=discord.Embed(title="выпало число:", description=f"**{rnumber}**",colour=self.client.COLORS['random']))
+        
+    @commands.command(
+        name="христос-воскрес",
+        aliases=["хс","христос_воскрес"],
+        brief="шуточная, временая команда для пасхи",
+        description="• христос-воскрес",
+        usage="христос-воскрес"
+        )
+    async def _hs(self, ctx):
+        otveti = ["Значит плохо закопали...","Ну воскрес и воскрес. Чё бубнить то?","Воистину воскресе!"]
+        await ctx.reply(embed=discord.Embed(description=random.choice(otveti),colour=client.COLORS['gold']))
 
 def setup(client):
     client.add_cog(utils(client))
