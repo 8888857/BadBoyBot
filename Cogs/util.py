@@ -218,7 +218,7 @@ class utils(commands.Cog, name="Утилиты"):
         )
     async def _hs(self, ctx):
         otveti = ["Значит плохо закопали...","Ну воскрес и воскрес. Чё бубнить то?","Воистину воскресе!"]
-        await ctx.reply(embed=discord.Embed(description=random.choice(otveti),colour=client.COLORS['gold']))
+        await ctx.reply(embed=discord.Embed(description=random.choice(otveti),colour=self.client.COLORS['gold']))
 
 def setup(client):
     client.add_cog(utils(client))
