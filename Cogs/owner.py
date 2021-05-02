@@ -9,11 +9,13 @@ import os
 import typing
 import subprocess
 import datetime
+import random
 from utils import DATABASE as DB
 from config import timeformMSK
 from config import deltaMSK
 
-class owner(commands.Cog):
+class owner(commands.Cog, name="Овнер"):
+    """команды только для овнеров бота:"""
     
     def __init__(self, client):
         self.client = client
@@ -33,7 +35,7 @@ class owner(commands.Cog):
         if isinstance(body[-1], ast.With):
             self.insert_returns(body[-1].body)
 
-
+    
     @commands.command(
         name="евал",
         aliases = ['eval'],
@@ -86,11 +88,12 @@ class owner(commands.Cog):
             '__import__': __import__,
             'DB': DB,
             'os': os,
+            'random': random
         }
         exec(compile(parsed, filename="<ast>", mode="exec"), env)
 
         result = (await eval(f"{fn_name}()", env))
-        await ctx.message.add_reaction("✅")
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = "ливай",
@@ -106,7 +109,8 @@ class owner(commands.Cog):
         else:
             guild = self.client.get_guild(guild_id)
         await guild.leave()
-        await ctx.reply(embed = discord.Embed(description = f"я успешно ливнул с сервер:\n{guild.name}",colour= config.COLORS['SUCCESS']))
+        await ctx.reply(embed = discord.Embed(description = f"я успешно ливнул с сервер:\n{guild.name}",colour= self.client.COLORS['SUCCESS']))
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
     
     @commands.command(
         name="рестарт",
@@ -131,48 +135,37 @@ class owner(commands.Cog):
         )
     @commands.is_owner()
     async def _cog(self, ctx, name, act):
+        if name in ['all','все']:
+            i = 'и '
+            i2 = "ы"
+            active = "все"
+        else:
+            i = ' '
+            i2 = ''
+            active = "один"
         if act in ['перезагрузить','перезагрузка','релоад','reload','r','р']:
-            if name in ['all','все']:
-                for cog in os.listdir('./Cogs'):
-                    if cog not in config.COGS_IGNORE:
-                        if cog.endswith('.py'):
-                            self.client.reload_extension(f'Cogs.{cog.replace(".py", "")}')
-                await ctx.message.add_reaction('✅')
-            else:
-                self.client.reload_extension(f"Cogs.{name}")
-                await ctx.message.add_reaction('✅')
-            print("-----------------------------------")
-            print(f'ког имя="{name}" - перезагружен')
-            print("-----------------------------------")
-            await self.client.on_off_channel.send(embed=discord.Embed(title="перезагружен(ы)",description=f"ког(и) «`{name}`» успешно перезагружен(ы)",colour=config.COLORS['BASE']))
+                act2 = "перезагружен"
+                act3 = self.client.reload_extension
+                emb_color = self.client.COLORS['BASE']
         if act in ['вкл','включить','загрузить','загрузка','load','лоад','l','л']:
-            if name in ['all','все']:
-                for cog in os.listdir('./Cogs'):
-                    if cog not in config.COGS_IGNORE:
-                        if cog.endswith('.py'):
-                            self.client.load_extension(f'Cogs.{cog.replace(".py", "")}')
-                await ctx.message.add_reaction('✅')
-            else:
-                self.client.load_extension(f"Cogs.{name}")
-                await ctx.message.add_reaction('✅')
-            print("-----------------------------------")
-            print(f'ког имя="{name}" - загружен')
-            print("-----------------------------------")
-            await self.client.on_off_channel.send(embed=discord.Embed(title="подгружен(ы)",description=f"ког(и) «`{name}`» успешно подгружен(ы)",colour=config.COLORS['SUCCESS']))
+                act2 = "загружен"
+                act3 = self.client.load_extension
+                emb_color = self.client.COLORS['SUCCESS']
         if act in ['выкл','выключить','отгрузка','анлоад','unload','u','а']:
-            if name in ['all','все']:
-                for cog in os.listdir('./Cogs'):
-                    if cog not in config.COGS_IGNORE:
-                        if cog.endswith('.py'):
-                            self.client.unload_extension(f'Cogs.{cog.replace(".py", "")}')
-                await ctx.message.add_reaction('✅')
-            else:
-                self.client.unload_extension(f"Cogs.{name}")
-                await ctx.message.add_reaction('✅')
-            print("-----------------------------------")
-            print(f'ког имя="{name}" - отгружен')
-            print("-----------------------------------")
-            await self.client.on_off_channel.send(embed=discord.Embed(title="отгружен(ы)",description=f"ког(и) «`{name}`» успешно отгружен(ы)",colour=config.COLORS['ERROR']))
+                act2 = "отгружен"
+                act3 = self.client.unload_extension
+                emb_color = self.client.COLORS['ERROR']
+        if active == "все":
+            for cog in os.listdir('./Cogs'):
+                if cog not in config.COGS_IGNORE:
+                    if cog.endswith('.py'):
+                        act3(f'Cogs.{cog.replace(".py", "")}')
+        if active == "один":
+            act3(f'Cogs.{name}')
+        print(f'-----------------------------------\nког{i}{name} - {act2}{i2}\n-----------------------------------')
+        await self.client.CHANNELS['on_off'].send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
+        await ctx.send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
         
     @commands.command(
         name="гинв",
@@ -184,12 +177,13 @@ class owner(commands.Cog):
     @commands.is_owner()
     async def _ginv(self, ctx, guild_id:int=None):
         if guild_id == None:
-            guild=ctx.guild
+            channel=ctx.channel
         else:
             guild = self.client.get_guild(guild_id)
-        channel = guild.channels[0]
+            channel = random.choice(guild.text_channels)
         invitelink = await channel.create_invite()
         await ctx.reply(invitelink)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             
 def setup(client):
     client.add_cog(owner(client))
