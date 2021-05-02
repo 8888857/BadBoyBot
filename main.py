@@ -15,7 +15,7 @@ from config import timeformMSK
 from config import deltaMSK
 
 
-client = commands.AutoShardedBot(shard_count=1, command_prefix = DB.Get().prefix,  intents = discord.Intents.all(), case_insensitive = True)
+client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
 slash = SlashCommand(client, sync_commands=True)
 
 client.remove_command('help')
@@ -25,20 +25,26 @@ async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
     client.owners = ai.team.members
+    client.owner = {
+        'id': [owner.id for owner in client.owners],
+        'name': [owner.name for owner in client.owners]
+    }
     client.premium_u = [511508551492173836,711826939224260618,714383981952630875,361156000155172865,683308136169603123,693151663321645098]
     client.owner_g = [813511569521639474]
     client.premium_g = [828067961934839861,759796323569500160,707187238127009862]
     client.black_list = []
-    client.idea_channel = client.get_channel(813511569795055634)
-    client.bug_channel = client.get_channel(813511569795055635)
-    client.review_channel = client.get_channel(827809033188278292)
-    client.on_off_channel = client.get_channel(813511570529320961)
-    client.error_channel = client.get_channel(832596225118830673)
     client.guilds_id = [guild.id for guild in client.guilds]
+    client.CHANNELS = {
+        'idea': client.get_channel(813511569795055634),
+        'bug': client.get_channel(813511569795055635),
+        'review': client.get_channel(827809033188278292),
+        'on_off': client.get_channel(813511570529320961)
+    }
     client.COLORS = {
         'BASE': 0xFF8000,
         'SUCCESS': 0x80FF00,
         'ERROR': 0xFF0700,
+        
         'red': 0xff1a1a,
         'dark_red': 0x992d22,
         'blue': 0x00ccff,
@@ -56,12 +62,28 @@ async def on_ready():
         'magenta': 0xe91e63, 
         'dark_magenta': 0xad1457,
         'gold': 0xf1c40f,
-        'dark_gold': 0xc27c0e,
-        'random': discord.Colour.random()
+        'dark_gold': 0xc27c0e
     }
     client.EMOJIS = {
         'SUCCESS': client.get_emoji(835420636490235905),
-        'ERROR': client.get_emoji(835420703029329931)
+        'ERROR': client.get_emoji(835420703029329931),
+        
+        "staff": client.get_emoji(815972657001660436),
+        "partner": client.get_emoji(815972654326480906),
+        "bug_hunter": client.get_emoji(815972668440182815),
+        "hypesquad_bravery": client.get_emoji(815972658843484191),
+        "hypesquad_brilliance": client.get_emoji(815972665763954689),
+        "hypesquad_balance": client.get_emoji(815972662773809213),
+        "early_supporter": client.get_emoji(815972640014598164),
+        "system": client.get_emoji(815972642103361537),
+        "bug_hunter_level_2": client.get_emoji(815972668440182815),
+        "verified_bot": client.get_emoji(815972644884185128),
+        "verified_bot_developer": client.get_emoji(815972649154641920),
+        
+        "dnd": client.get_emoji(813698546657787914),
+        "idle": client.get_emoji(813698687913295894),
+        "online": client.get_emoji(813698625569947680),
+        "offline": client.get_emoji(813698775125983272),
     }
     for cog in os.listdir('./Cogs'):
         if cog not in config.COGS_IGNORE:
