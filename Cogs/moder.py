@@ -52,7 +52,7 @@ class moder(commands.Cog, name = "Модерация"):
         if channel is None: channel = ctx.channel
         if (ctx.author in self.client.owners
         or channel.permissions_for(ctx.author).manage_messages):
-            if ctx.author in self.client.owners:
+            if ctx.author.id in [owner.id for owner in self.client.owners]:
                 if amount > 9999999999999999999:
                     return await ctx.reply(embed = discord.Embed(title = "Ошибка очистки чата", description = "ты даун что ли? куда тебе столько", colour = config.COLORS['ERROR']))
             if ctx.author.id in self.client.premium_u:
