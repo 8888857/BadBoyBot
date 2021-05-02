@@ -42,7 +42,7 @@ class moder(commands.Cog, name = "Модерация"):
     @commands.command(
         name = "очистить",
         brief = "Очистка чата",
-        aliases = ['clear','чистка'],
+        aliases = ['clear','чистка','отчистка','отчистить'],
         usage = "очистить [количество сообщений] (канал)",
         description="• очистить 100\n• очистить 100 #новости"
     )
