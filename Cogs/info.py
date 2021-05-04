@@ -3,6 +3,7 @@ from discord import utils
 from discord.utils import get
 from discord.ext import commands
 from discord.ext.commands import has_permissions
+from discord_slash import cog_ext, SlashContext
 import datetime
 import config
 from config import timeformMSK
@@ -15,13 +16,13 @@ from utils import DATABASE as DB
 from asyncio import sleep
 import ast
 import typing
+import random
 
 class info(commands.Cog, name="Информация"):
     """Инфо комманды:"""
-
     def __init__(self, client):
         self.client = client
-
+    
     @commands.command(
         name="хелп",
         aliases=["help","помощь"],
@@ -31,18 +32,22 @@ class info(commands.Cog, name="Информация"):
     )
     async def _help(self, ctx: commands.Context, input_name = None):
         prefix = DB.Get(ctx).prefix(None, ctx.message)
+        if ctx.author.id in [owner.id for owner in self.client.owners]:
+            bcklist = ["events"]
+        elif ctx.author.id not in [owner.id for owner in self.client.owners]:
+            bcklist = ["events", "Овнер"]
         if input_name is None:
             embed = discord.Embed(
-                description=f"Мой префикс - `{prefix}`\nПомощь по коммандам - `{prefix}хелп [команда]`",
-                colour=config.COLORS['BASE'])
+                description=f"Мой префикс - `{prefix}`\nПомощь по коммандам - `{prefix}хелп [команда]`\nсервер поддержки - **[[зайти]](https://discord.gg/X3VcB5mrTG)**",
+                colour=self.client.COLORS['BASE'])
             for cog in self.client.cogs:
                 cog = self.client.cogs[cog]
-                if cog.qualified_name in ["events", "owner","act"]:
+                if cog.qualified_name in bcklist:
                     continue
                 help_commands = ''
                 for command in cog.get_commands():
                     help_commands += command.qualified_name + ', '
-                embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"*`{cog.description}`*\n{re.sub(r', $', '', help_commands)}\n")
+                embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"*`{cog.description}`*\n{re.sub(r', $', '', help_commands)}\n",inline=False)
             embed.set_thumbnail(url=self.client.user.avatar_url)
             embed.set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.")
             await ctx.reply(embed=embed)
@@ -50,8 +55,8 @@ class info(commands.Cog, name="Информация"):
             command = self.client.get_command(input_name)
             if command is None:
                 embed = discord.Embed(title="Помощь по командам",
-                    description=f"Мой префикс - `{prefix}`\nДля подробной информации по команде используйте {prefix}хелп [команда]",
-                    colour=config.COLORS['BASE'])
+                    description=f"Мой префикс - `{prefix}`\nПомощь по коммандам - `{prefix}хелп [команда]`\nсервер поддержки - **[[зайти]](https://discord.gg/X3VcB5mrTG)**",
+                    colour=self.client.COLORS['BASE'])
                 for cog in self.client.cogs:
                     cog = self.client.cogs[cog]
                     if cog.qualified_name in ["events", "owner","act"]:
@@ -59,12 +64,19 @@ class info(commands.Cog, name="Информация"):
                     help_commands = ''
                     for command in cog.get_commands():
                         help_commands += command.qualified_name + ', '
-                    embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"{cog.description}\n{re.sub(r', $', '', help_commands)}\n")
+                    embed.add_field(name='\n' + cog.qualified_name.capitalize(), value=f"{cog.description}\n{re.sub(r', $', '', help_commands)}\n",inline=False)
                 embed.set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.")
                 embed.set_thumbnail(url=self.client.user.avatar_url)
                 await ctx.reply(embed=embed)
             else:
-                await ctx.reply(embed = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.brief}`", colour = config.COLORS['BASE']).add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}").add_field(name="Использование:",value=f"{prefix}{command.usage}").add_field(name="Примеры:",value=f"```\n{command.description}\n```").set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.").set_thumbnail(url=self.client.user.avatar_url))
+                emb = discord.Embed(title = f"Команда: **`{command.name}`**", description = f"`{command.brief}`\nсервер поддержки - **[[зайти]](https://discord.gg/X3VcB5mrTG)**", colour = self.client.COLORS['BASE'])
+                emb.add_field(name='Алиасы:', value=f"{re.sub(r', $', '', ', '.join(command.aliases))}",inline=False)
+                emb.add_field(name="Использование:",value=f"{prefix}{command.usage}",inline=False)
+                emb.add_field(name="Примеры:",value=f"```\n{command.description}\n```",inline=False)
+                emb.set_footer(icon_url=self.client.user.avatar_url,text="аргументы в [] обязательны к указыванию, а в () нет.")
+                emb.set_thumbnail(url=self.client.user.avatar_url)
+                await ctx.reply(embed = emb)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
                 
     @commands.command(
         aliases=["user","юзеринфо","userinfo","пользователь"],
@@ -76,7 +88,7 @@ class info(commands.Cog, name="Информация"):
     async def _user(self, ctx,member:discord.Member= None,guild: discord.Guild = None):
         if member == None:
             member = ctx.author
-        emb = discord.Embed(title='Информация о пользователе',colour = config.COLORS['BASE'])
+        emb = discord.Embed(title='Информация о пользователе',colour = self.client.COLORS['BASE'])
         if  member.name != member.display_name:
             emb.add_field(name="Имя:",value=member.name,inline=False)
             emb.add_field(name="Имя на сервере:",value=member.mention)
@@ -85,33 +97,17 @@ class info(commands.Cog, name="Информация"):
         emb.add_field(name="Статус:", value=member.activity,inline=False)
         t = member.status
         if t == discord.Status.online:
-            d = "<:online:813698625569947680> В сети"
-        t = member.status
+            d = f"{self.client.EMOJIS['online']} В сети"
         if t == discord.Status.offline:
-            d = "<:offline:813698775125983272>  Не в сети"
-        t = member.status
+            d = f"{self.client.EMOJIS['offline']} Не в сети"
         if t == discord.Status.idle:
-            d = "<:idle:813698687913295894> Не активен"
-        t = member.status
+            d = f"{self.client.EMOJIS['idle']} Не активен"
         if t == discord.Status.dnd:
-            d = "<:dnd:813698546657787914> Не беспокоить"
+            d = f"{self.client.EMOJIS['dnd']} Не беспокоить"
         emb.add_field(name="Активность:", value=d,inline=False)
-        emojis = {
-            "staff": "<:discord_staff:777516108260704256>",
-            "partner": "<:discord_partner:777513164912328706>",
-            "bug_hunter": "<:bug_hunter:777543195483570197>",
-            "hypesquad_bravery": "<:hypesquad_bravery:777540499858653195>",
-            "hypesquad_brilliance": "<:hypesquad_brilliance:777540500035076127>",
-            "hypesquad_balance": "<:hypesquad_balance:777540500026294272>",
-            "early_supporter": "<:early_supporter:777504637094985758>",
-            "system": "<:discord:777505535930007593>",
-            "bug_hunter_level_2": "<:bug_hunter:777543195483570197>",
-            "verified_bot": "<:verified_bot:777507474017615884>",
-            "verified_bot_developer": "<:verified_bot_developer:777510397316956170>"
-        }
         emojis_str = ''
         for flag in member.public_flags.all():
-            emojis_str += emojis[flag.name] + ' '
+            emojis_str += f'{self.client.EMOJIS[flag.name]}' + ' '
         emb.add_field(name = "Значки:", value =emojis_str if emojis_str != '' else "Нету", inline = False)
         if member in self.client.owners:
             emb.add_field(name="премиум статус:",value="**OWNER PREMIUM**",inline=False)
@@ -126,6 +122,7 @@ class info(commands.Cog, name="Информация"):
         emb.set_thumbnail(url=member.avatar_url)
         emb.set_footer(text=f"id: {member.id}")
         await ctx.reply(embed = emb)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             
     @commands.command(
         name="аватар",
@@ -142,13 +139,14 @@ class info(commands.Cog, name="Информация"):
         if member == None:
             member = ctx.author
         if psize not in ["16","32","64","128","256","512","1024","2048","4096"]:
-            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение размера не валидно.\nможно использовать только:\n16, 32, 64, 128, 256, 512, 1024, 2048, 4096.',colour=config.COLORS['ERROR']))
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение размера не валидно.\nможно использовать только:\n16, 32, 64, 128, 256, 512, 1024, 2048, 4096.',colour=self.client.COLORS['ERROR']))
         if pformat not in ["webp","jpeg","jpg","png","gif"]:
-            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение формата не валидно.\nможно использовать только:\nwebp, jpeg, jpg, png, gif.',colour=config.COLORS['ERROR']))
-        emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=config.COLORS['BASE'])
+            return await ctx.reply(embed=discord.Embed(title='ошибка', description='значение формата не валидно.\nможно использовать только:\nwebp, jpeg, jpg, png, gif.',colour=self.client.COLORS['ERROR']))
+        emb = discord.Embed(title=f"аватар пользователя:",description=member.mention, colour=self.client.COLORS['BASE'])
         emb.set_image(url=member.avatar_url_as(format=pformat,size=int(psize)))
         await ctx.reply(embed = emb)
-
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+    
     @commands.command(
         name="сервер",
         usage="сервер",
@@ -170,7 +168,7 @@ class info(commands.Cog, name="Информация"):
        
       emb = discord.Embed(
           title="Информация о сервере:",
-          colour=config.COLORS['BASE']
+          colour=self.client.COLORS['BASE']
         )
       emb.set_thumbnail(url=icon)
       emb.add_field(name="Название:", value=name,inline=True)
@@ -197,6 +195,7 @@ class info(commands.Cog, name="Информация"):
         emb.add_field(name = "Количество бустов", value = ctx.guild.premium_subscription_count)
       emb.set_footer(text=f"id: {ctx.guild.id}")
       await ctx.reply(embed=emb)
+      await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name="эмоджи",
@@ -206,14 +205,15 @@ class info(commands.Cog, name="Информация"):
         description="• эмоджи 😎"
         )
     async def _emoji(self, ctx,emoji: discord.Emoji):
-            emb = discord.Embed(title = f"Информация об эмоджи:\n :{emoji.name}:", colour=config.COLORS['BASE'])
-            emb.add_field(name = "Анимированное", value = "Да" if emoji.animated else "Нет", inline = False)
-            emb.add_field(name = "Сервер эмоджи", value = emoji.guild.name)
-            emb.add_field(name = "Время создания", value = (emoji.created_at+deltaMSK).strftime(timeformMSK), inline = False)
-            emb.add_field(name = "URL", value = emoji.url, inline = False)
-            emb.set_image(url = emoji.url)
-            emb.set_footer(text = f"ID {emoji.id}")
-            await ctx.reply(embed = emb)
+        emb = discord.Embed(title = f"Информация об эмоджи:\n :{emoji.name}:", colour=self.client.COLORS['BASE'])
+        emb.add_field(name = "Анимированное", value = "Да" if emoji.animated else "Нет", inline = False)
+        emb.add_field(name = "Сервер эмоджи", value = emoji.guild.name)
+        emb.add_field(name = "Время создания", value = (emoji.created_at+deltaMSK).strftime(timeformMSK), inline = False)
+        emb.add_field(name = "URL", value = emoji.url, inline = False)
+        emb.set_image(url = emoji.url)
+        emb.set_footer(text = f"ID {emoji.id}")
+        await ctx.reply(embed = emb)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
         
     @commands.command(
         name = "бот",
@@ -226,9 +226,10 @@ class info(commands.Cog, name="Информация"):
         servers=len(self.client.guilds)
         users=len(self.client.users)
         commands=len(self.client.commands)
+        channels=len(list(self.client.get_all_channels()))
         time = datetime.datetime.now()
-        msg = await ctx.reply(embed=discord.Embed(title="bot", description="загрузка...",colour=config.COLORS['SUCCESS']))
-        emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=config.COLORS['BASE'])
+        msg = await ctx.reply(embed=discord.Embed(title="bot", description="загрузка...",colour=self.client.COLORS['SUCCESS']))
+        emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=self.client.COLORS['BASE'])
         emb.add_field(name="Создатель:",value=self.client.owners[2].mention)
         emb.add_field(name="Разработчик(и):",
         value=f"{self.client.owners[0].mention}, {self.client.owners[1].mention}")
@@ -237,11 +238,13 @@ class info(commands.Cog, name="Информация"):
         emb.add_field(name="Ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
         emb.add_field(name="Ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек")
         emb.add_field(name="Серверов:",value=servers,inline=False)
+        emb.add_field(name="Каналов:",value=channels,inline=False)
         emb.add_field(name="Пользователей:",value=users,inline=False)
         emb.add_field(name="Команд:",value=commands,inline=False)
         emb.add_field(name="Полезные ссылки:",value=f"сервер - **[[волшебная кнопка]](https://discord.gg/X3VcB5mrTG)**\nпригласить бота - **[[волшебная кнопка]](https://discord.com/api/oauth2/authorize?client_id={self.client.user.id}&permissions=8&scope=bot)**",inline=False)
         emb.set_thumbnail(url=self.client.user.avatar_url)
         await msg.edit(embed=emb)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
         
     @commands.command(
         name="пинг",
@@ -252,8 +255,9 @@ class info(commands.Cog, name="Информация"):
         )
     async def _ping(self, ctx):
         time = datetime.datetime.now()
-        msg = await ctx.reply(embed=discord.Embed(title="ping", description="загрузка...",colour=config.COLORS['SUCCESS']))
-        await msg.edit(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
+        msg = await ctx.reply(embed=discord.Embed(title="ping", description="загрузка...",colour=self.client.COLORS['SUCCESS']))
+        await msg.edit(embed=discord.Embed(colour=self.client.COLORS['BASE']).add_field(name="ping WebSocket:",value=f"{round(self.client.latency, 3)} сек").add_field(name="ping Discord API:",value=f"{str(round((datetime.datetime.now() - time).total_seconds(), 3))} сек"))
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
     
     @commands.command(
         name = "канал",
@@ -267,7 +271,7 @@ class info(commands.Cog, name="Информация"):
             channel = ctx.channel
         if type(channel) == discord.DMChannel:
             raise discord.ext.commands.errors.NoPrivateMessage
-        embed = discord.Embed(title = f"Информация о канале {channel.name}", colour = config.COLORS['BASE'])
+        embed = discord.Embed(title = f"Информация о канале {channel.name}", colour = self.client.COLORS['BASE'])
         if type(channel) == discord.TextChannel:
             embed.add_field(name = "Тип канала", value = "Текстовый", inline = False)
             embed.add_field(name = "Описание канала", value = channel.topic if channel.topic is not None else "Отсутствует", inline = False)
@@ -294,6 +298,7 @@ class info(commands.Cog, name="Информация"):
 
         embed.set_footer(text = f"ID {channel.id}")
         await ctx.reply(embed = embed)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = "инфо-роль",
@@ -303,7 +308,7 @@ class info(commands.Cog, name="Информация"):
         description="• инфо роль @супер_пупер_роль"
     )
     async def _role(self, ctx, * ,role: discord.Role):
-        embed = discord.Embed(title = f"Информация о роли {role.name}", colour = config.COLORS['BASE'])
+        embed = discord.Embed(title = f"Информация о роли {role.name}", colour = self.client.COLORS['BASE'])
         embed.add_field(name = "Цвет роли", value = role.color, inline = False)
         embed.add_field(name = "Роль создана", value = (role.created_at + deltaMSK).strftime(timeformMSK), inline = False)
         embed.add_field(name = "Позиция(с конца)", value = f"{role.position + 1}/{len(role.guild.roles)}", inline = False)
@@ -313,7 +318,7 @@ class info(commands.Cog, name="Информация"):
 
         embed.set_footer(text = f"ID {role.id}")
         await ctx.reply(embed = embed)
-    
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
 def setup(client):
     client.add_cog(info(client))
