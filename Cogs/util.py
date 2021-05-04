@@ -207,7 +207,7 @@ class utils(commands.Cog, name="Утилиты"):
                     rnumber = random.randint(finish, start)
                 else:
                     rnumber = random.randint(start, finish)
-        await ctx.reply(embed=discord.Embed(title="выпало число:", description=f"**{rnumber}**",colour=self.client.COLORS['random']))
+        await ctx.reply(embed=discord.Embed(title="выпало число:", description=f"**{rnumber}**",colour=discord.Colour.random()))
         
     @commands.command(
         name="христос-воскрес",
