@@ -33,7 +33,10 @@ class info(commands.Cog, name="Информация"):
     async def _help(self, ctx: commands.Context, input_name = None):
         prefix = DB.Get(ctx).prefix(None, ctx.message)
         if ctx.author.id in [owner.id for owner in self.client.owners]:
-            bcklist = ["events"]
+            if input_name == "no_owner":
+                bcklist = ["events", "Овнер"]
+            else:
+                bcklist = ["events"]
         elif ctx.author.id not in [owner.id for owner in self.client.owners]:
             bcklist = ["events", "Овнер"]
         if input_name is None:
