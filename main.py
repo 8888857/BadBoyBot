@@ -38,7 +38,9 @@ async def on_ready():
         'idea': client.get_channel(813511569795055634),
         'bug': client.get_channel(813511569795055635),
         'review': client.get_channel(827809033188278292),
-        'on_off': client.get_channel(813511570529320961)
+        'on_off': client.get_channel(813511570529320961),
+        'guilds': client.get_channel(839649855839404043),
+        'members': client.get_channel(839650083893149716)
     }
     client.COLORS = {
         'BASE': 0xFF8000,
@@ -85,6 +87,8 @@ async def on_ready():
         "online": client.get_emoji(813698625569947680),
         "offline": client.get_emoji(813698775125983272),
     }
+    await client.CHANNELS['guilds'].edit(name=f"серверов: {len(client.guilds)}")
+    await client.CHANNELS['members'].edit(name=f"пользователей: {len(client.users)}")
     for cog in os.listdir('./Cogs'):
         if cog not in config.COGS_IGNORE:
             if cog.endswith('.py'):
