@@ -23,7 +23,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/dog") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = 'кот',
@@ -36,7 +37,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/cat") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = 'птица',
@@ -49,7 +51,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/birb") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = 'лиса',
@@ -62,7 +65,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/fox") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = 'панда',
@@ -75,7 +79,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/panda") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
     @commands.command(
         name = 'коала',
@@ -88,7 +93,8 @@ class Images(commands.Cog, name = "Изображения"):
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{self.some_random_api}/img/koala") as r:
                 data = await r.text()
-                await ctx.reply(json.loads(data)['link'].replace('"', ''))
+                await ctx.reply(embed=discord.Embed(colour=self.client.COLORS['BASE']).set_image(url=json.loads(data)['link'].replace('"', '')))
+                await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
 
 
 def setup(client):
