@@ -192,6 +192,7 @@ class owner(commands.Cog, name="Овнер"):
         aliases=["push"],
         description="• АЛОООО ты и сам знать должен😎👌"
         )
+    @commands.is_owner()
     async def _push(self, ctx, targ=None, pm2_id_or_cog_name=None):
         os.chdir("/root/badboybot")
         os.system("git pull")
