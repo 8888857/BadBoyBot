@@ -31,7 +31,7 @@ class FeedBack(commands.Cog):
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
-            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
     
     @commands.command(
         name="баг",
@@ -53,7 +53,7 @@ class FeedBack(commands.Cog):
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
-            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             
     @commands.command(
         name="отзыв",
@@ -75,7 +75,7 @@ class FeedBack(commands.Cog):
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
-            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
     
 def setup(client):
     client.add_cog(FeedBack(client))
