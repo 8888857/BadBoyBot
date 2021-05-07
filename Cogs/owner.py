@@ -208,6 +208,7 @@ class owner(commands.Cog, name="Овнер"):
                 i = " "
                 i2 = ""
                 self.client.reload_extension(f'Cogs.{pm2_id_or_cog_name}')
+            print(f'-----------------------------------\nког{i}{name} - перезагружен{i2}\n-----------------------------------')
             await self.client.CHANNELS['on_off'].send(embed=discord.Embed(title=f"перезагружен{i2}",description=f"ког{i} {pm2_id_or_cog_name} успешно перезагружен{i2}",colour=self.client.COLORS['BASE']))
             emb.add_field(name=f"перезагружен{i2}",value=f"ког{i} {pm2_id_or_cog_name} успешно перезагружен{i2}")
         if targ in ["bot","бот","б","b"]:
