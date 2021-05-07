@@ -184,6 +184,39 @@ class owner(commands.Cog, name="Овнер"):
         invitelink = await channel.create_invite()
         await ctx.reply(invitelink)
         await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+        
+    @commands.command(
+        name="пуш",
+        usage="пуш (бот/ког) (айди/имя)",
+        brief="загружает обнову с гитхаба",
+        aliases=["push"],
+        description="• АЛОООО ты и сам знать должен😎👌"
+        )
+    async def _push(self, ctx, targ=None, pm2_id_or_cog_name=None):
+        os.chdir("/root/badboybot")
+        os.system("git pull")
+        emb = discord.Embed(description="файлы с гитхаба успешно добавлены",colour=self.client.COLORS['BASE'])
+        if targ in ["cog","ког","к","c"]:
+            if pm2_id_or_cog_name in ["все","all"]:
+                i = "и "
+                i2 = "ы"
+                for cog in os.listdir('./Cogs'):
+                    if cog not in config.COGS_IGNORE:
+                        if cog.endswith('.py'):
+                            act3(f'Cogs.{cog.replace(".py", "")}')
+            else:
+                i = " "
+                i2 = ""
+                self.client.reload_extension(f'Cogs.{pm2_id_or_cog_name}')
+            await self.client.CHANNELS['on_off'].send(embed=discord.Embed(title=f"перезагружен{i2}",description=f"ког{i} {pm2_id_or_cog_name} успешно перезагружен{i2}",colour=self.client.COLORS['BASE']))
+            emb.add_field(name=f"перезагружен{i2}",value=f"ког{i} {pm2_id_or_cog_name} успешно перезагружен{i2}")
+        if targ in ["bot","бот","б","b"]:
+            if pm2_id_or_cog_name == None:
+                pm2_id_or_cog_name = "BadBoyBot"
+            emb.add_field(name="перезагружен",value="весь бот")
+            os.system(f"pm2 reload {pm2_id_or_cog_name}")
+        await ctx.reply(embed=emb)
+        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             
 def setup(client):
     client.add_cog(owner(client))
