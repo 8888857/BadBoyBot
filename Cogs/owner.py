@@ -203,7 +203,7 @@ class owner(commands.Cog, name="Овнер"):
                 for cog in os.listdir('./Cogs'):
                     if cog not in config.COGS_IGNORE:
                         if cog.endswith('.py'):
-                            act3(f'Cogs.{cog.replace(".py", "")}')
+                            self.client.reload_extension(f'Cogs.{cog.replace(".py", "")}')
             else:
                 i = " "
                 i2 = ""
