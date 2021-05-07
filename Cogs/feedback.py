@@ -26,11 +26,12 @@ class FeedBack(commands.Cog):
         else:
             emb = discord.Embed(title= f"команду {prefix}идея", description= f"**использовал:\n{ctx.author}**\n`(id-{ctx.author.id})`\nтекст:\n```\n{idea}\n```", colour=config.COLORS['BASE'])
             emb.set_footer(text = f"{ctx.guild.name}\nid-{ctx.guild.id}" if ctx.guild is not None else "~~ЛС", icon_url = ctx.guild.icon_url_as(static_format = "jpg") if ctx.guild is not None else ctx.author.avatar_url_as(static_format = "jpg"))
-            msg = await self.client.idea_channel.send(embed=emb)
+            msg = await self.client.CHANNELS["idea"].send(embed=emb)
             await msg.add_reaction('✅')
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
+            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
     
     @commands.command(
         name="баг",
@@ -47,11 +48,12 @@ class FeedBack(commands.Cog):
         else:
             emb = discord.Embed(title= f"команду {prefix}баг", description= f"**использовал:\n{ctx.author}**\n`(id-{ctx.author.id})`\nтекст:\n```\n{bug}\n```", colour=config.COLORS['BASE'])
             emb.set_footer(text = f"{ctx.guild.name}\nid-{ctx.guild.id}" if ctx.guild is not None else "~~ЛС", icon_url = ctx.guild.icon_url_as(static_format = "jpg") if ctx.guild is not None else ctx.author.avatar_url_as(static_format = "jpg"))
-            msg = await self.client.bug_channel.send(embed=emb)
+            msg = await self.client.CHANNELS['bug'].send(embed=emb)
             await msg.add_reaction('✅')
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
+            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
             
     @commands.command(
         name="отзыв",
@@ -68,11 +70,12 @@ class FeedBack(commands.Cog):
         else:
             emb = discord.Embed(title= f"команду {prefix}отзыв", description= f"**использовал:\n{ctx.author}**\n`(id-{ctx.author.id})`\nтекст:\n```\n{review}\n```", colour=config.COLORS['BASE'])
             emb.set_footer(text = f"{ctx.guild.name}\nid-{ctx.guild.id}" if ctx.guild is not None else "~~ЛС", icon_url = ctx.guild.icon_url_as(static_format = "jpg") if ctx.guild is not None else ctx.author.avatar_url_as(static_format = "jpg"))
-            msg = await self.client.review_channel.send(embed=emb)
+            msg = await self.client.CHANNELS['review'].send(embed=emb)
             await msg.add_reaction('✅')
             await msg.add_reaction('⚪')
             await msg.add_reaction('❌')
             await ctx.reply(embed = discord.Embed(description=f"**{ctx.message.author.mention}**,\n спасибо за ваш вклад в развитие бота", colour=config.COLORS['BASE']))
-            
+            await ctx.message.add_reaction(client.EMOJIS['SUCCESS'])
+    
 def setup(client):
     client.add_cog(FeedBack(client))
