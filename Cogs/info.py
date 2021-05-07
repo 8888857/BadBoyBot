@@ -62,7 +62,7 @@ class info(commands.Cog, name="Информация"):
                     colour=self.client.COLORS['BASE'])
                 for cog in self.client.cogs:
                     cog = self.client.cogs[cog]
-                    if cog.qualified_name in ["events", "owner","act"]:
+                    if cog.qualified_name in bcklist:
                         continue
                     help_commands = ''
                     for command in cog.get_commands():
