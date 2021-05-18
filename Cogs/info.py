@@ -12,7 +12,6 @@ import aiohttp
 import os
 import re
 import asyncio
-from utils import DATABASE as DB
 from asyncio import sleep
 import ast
 import typing
@@ -31,7 +30,7 @@ class info(commands.Cog, name="Информация"):
         description=f"• хелп\n• хелп юзеринфо"
     )
     async def _help(self, ctx: commands.Context, input_name = None):
-        prefix = DB.Get(ctx).prefix(None, ctx.message)
+        prefix = config.prefix
         if ctx.author.id in [owner.id for owner in self.client.owners]:
             if input_name in ["no_owner","noowner","noown","no","не_овнер","неовнер","неовн","но"]:
                 bcklist = ["events", "Овнер"]
