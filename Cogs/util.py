@@ -23,6 +23,7 @@ import urllib
 import pyowm
 from pyowm.utils.config import get_default_config
 
+
 class utils(commands.Cog, name="Утилиты"):
     """утилит комманды:"""
 
@@ -112,15 +113,15 @@ class utils(commands.Cog, name="Утилиты"):
     async def _calculator(self, ctx, *, expression = None):
         mathjs = "http://api.mathjs.org/v4"
         if not expression:
-            return await ctx.reply(embed = discord.Embed(description = "Укажите выражение, которое необходимо вычислить", colour = config.COLORS['ERROR']))
+            return await ctx.reply(embed = discord.Embed(description = "Укажите выражение, которое необходимо вычислить", colour = self.client.COLORS['ERROR']))
         async with aiohttp.ClientSession() as cs:
             async with cs.get(f"{mathjs}?expr={expression.replace(' ', '').replace('+', '%2B').replace('/', '%2F2')}") as r:
                 r = await r.read()
                 r = r.decode('utf-8')
                 if 'Error: Undefined symbol' in r:
-                    return await ctx.reply(embed = discord.Embed(description = "Неопознанный символ", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(description = "Неопознанный символ", colour = self.client.COLORS['ERROR']))
                 elif 'Error' in r:
-                    return await ctx.reply(embed = discord.Embed(description = "Произошла непредвиденная ошибка. Повторите попытку позже.", colour = config.COLORS['ERROR']))
+                    return await ctx.reply(embed = discord.Embed(description = "Произошла непредвиденная ошибка. Повторите попытку позже.", colour = self.client.COLORS['ERROR']))
                 await ctx.reply(f"Результат: {r}", allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = False))
 
     @commands.command(
@@ -133,7 +134,7 @@ class utils(commands.Cog, name="Утилиты"):
     async def _vote(self, ctx, quantity:int, * ,topic):
         if (quantity <= 0
         or 10 < quantity):
-            return await ctx.send(embed=discord.Embed(title="ошибка",description="кол-во реакций не должно быть меньше 1 и больше 10",colour=config.COLORS['ERROR']))
+            return await ctx.send(embed=discord.Embed(title="ошибка",description="кол-во реакций не должно быть меньше 1 и больше 10",colour=self.client.COLORS['ERROR']))
         await ctx.message.delete()
         emb = discord.Embed(description=topic,colour=ctx.author.color)
         emb.set_author(name=ctx.author.name,icon_url=ctx.author.avatar_url)
@@ -178,7 +179,7 @@ class utils(commands.Cog, name="Утилиты"):
         tempfeellike = w.temperature('celsius')['feels_like']
         icon = w.weather_icon_url(size='2x')
         wind = w.wind()['speed']
-        emb=discord.Embed(title=f"в городе __**{city}**__",colour=config.COLORS['BASE'])
+        emb=discord.Embed(title=f"в городе __**{city}**__",colour=self.client.COLORS['BASE'])
         emb.add_field(name="Температура:",value=f"{temp}°C")
         if tempfeellike != temp:
             emb.add_field(name="Температура ощущается как:",value=f"{tempfeellike}°C")
@@ -187,7 +188,6 @@ class utils(commands.Cog, name="Утилиты"):
         emb.set_thumbnail(url=icon)
         
         await ctx.reply(embed=emb)
-
 
     @commands.command(
         name="рандом",
@@ -208,17 +208,6 @@ class utils(commands.Cog, name="Утилиты"):
                 else:
                     rnumber = random.randint(start, finish)
         await ctx.reply(embed=discord.Embed(title="выпало число:", description=f"**{rnumber}**",colour=discord.Colour.random()))
-        
-    @commands.command(
-        name="христос-воскрес",
-        aliases=["хс","христос_воскрес"],
-        brief="шуточная, временая команда для пасхи",
-        description="• христос-воскрес",
-        usage="христос-воскрес"
-        )
-    async def _hs(self, ctx):
-        otveti = ["Значит плохо закопали...","Ну воскрес и воскрес. Чё бубнить то?","Воистину воскресе!"]
-        await ctx.reply(embed=discord.Embed(description=random.choice(otveti),colour=self.client.COLORS['gold']))
-
+    
 def setup(client):
     client.add_cog(utils(client))
