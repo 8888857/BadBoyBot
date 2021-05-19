@@ -232,9 +232,9 @@ class info(commands.Cog, name="Информация"):
         time = datetime.datetime.now()
         msg = await ctx.reply(embed=discord.Embed(title="bot", description="загрузка...",colour=self.client.COLORS['SUCCESS']))
         emb= discord.Embed(title="Информация о боте",description= f"Я - Discord бот {self.client.user.mention}.\n Сейчас я умею делать немного вещей, но мой создатель постоянно меня улучшает и добавляет в меня новые функции.",colour=self.client.COLORS['BASE'])
-        emb.add_field(name="Создатель:",value=self.client.owners[2].mention)
+        emb.add_field(name="Создатель:",value=self.client.owners[1].mention)
         emb.add_field(name="Разработчик(и):",
-        value=f"{self.client.owners[0].mention}, {self.client.owners[1].mention}")
+        value=f"{self.client.owners[0].mention}")
         emb.add_field(name="Был выкован гномами(создан):",value=(self.client.user.created_at+deltaMSK).strftime(timeformMSK))
         emb.add_field(name="Запущен:",value=self.client.start_time.strftime(timeformMSK))
         emb.add_field(name="Ping WebSocket:",value=f"{round(self.client.latency, 3)} сек")
