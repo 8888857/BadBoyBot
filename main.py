@@ -3,7 +3,6 @@ from discord import utils
 from discord.ext import commands
 from discord.ext.commands import has_permissions
 from discord_slash import SlashCommand
-from utils import DATABASE as DB
 from discord.utils import get
 import os
 import asyncio
@@ -15,7 +14,7 @@ from config import timeformMSK
 from config import deltaMSK
 
 
-client = commands.AutoShardedBot(shard_count=1, command_prefix = DB.Get().prefix,  intents = discord.Intents.all(), case_insensitive = True)
+client = commands.AutoShardedBot(shard_count=1, command_prefix = config.prefix,  intents = discord.Intents.all(), case_insensitive = True)
 slash = SlashCommand(client, sync_commands=True)
 
 client.remove_command('help')
