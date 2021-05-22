@@ -7,37 +7,12 @@ import typing
 import datetime
 from config import timeformMSK
 from config import deltaMSK
-from utils import DATABASE as DB
 
 class moder(commands.Cog, name = "Модерация"):
     """Модерационные комманды:"""
     def __init__(self, client):
         self.client = client
 
-    @commands.command(
-        name = "префикс",
-        brief = "Установка префикса бота на сервере",
-        aliases = ['prefix'],
-        usage = "префикс (новый префикс)",
-        description="• префикс\n• префикс -_-"
-    )
-    @commands.guild_only()
-    @commands.has_permissions(administrator = True)
-    async def _prefix(Self, ctx, *, new_prefix = None):
-        if new_prefix is None:
-            current_prefix = DB.Get(ctx).prefix(None, ctx.message)
-            return await ctx.reply(embed = discord.Embed(title = "Настройка префикса", description = f"Текущий префикс бота на сервере - `{current_prefix}` Чтобы изменить его, воспользуйтесь командой {current_prefix}префикс <новый префикс>", colour = config.COLORS['BASE']))
-        else:
-            if ctx.prefix == new_prefix:
-                return await ctx.reply(embed=discord.Embed(title="ошибка",description="префикс не должен совпадать с нынешним префиксом.",colour=config.COLORS['ERROR']))
-            if ' ' in new_prefix:
-                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Префикс не должен содержать пробелы", colour = config.COLORS['ERROR']))
-            if len(new_prefix) > 5:
-                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Префикс не должен быть длиннее 4 символов", colour = config.COLORS['ERROR']))
-            if DB.Set(ctx).prefix(new_prefix):
-                return await ctx.reply(embed = discord.Embed(title = "Префикс успешно изменён", description = f"Теперь префикс бота на этом сервере - `{new_prefix}`", colour = config.COLORS['SUCCESS']))
-            else:
-                return await ctx.reply(embed = discord.Embed(title = "Ошибка при обновлении префикса", description = "Произошла непредвиденная ошибка при обновлении префикса. Повторите попытку позже", colour = config.COLORS['ERROR']))
 
     @commands.command(
         name = "очистить",
