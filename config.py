@@ -8,7 +8,8 @@ COGS_IGNORE = ['cog.py','narabotki.py']
 COLORS = {
     'BASE': 0xFF8000,
     'SUCCESS': 0x80FF00,
-    'ERROR': 0xFF0700
+    'ERROR': 0xFF0700,
+    '2':0x222222
 }
 
 timeformMSK = " %H:%M %d.%m.%Y ||`UTC(+3:00)`||"
