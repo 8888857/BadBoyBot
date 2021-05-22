@@ -10,7 +10,6 @@ import typing
 import subprocess
 import datetime
 import random
-from utils import DATABASE as DB
 from config import timeformMSK
 from config import deltaMSK
 
@@ -86,7 +85,6 @@ class owner(commands.Cog, name="Овнер"):
             'commands': commands,
             'ctx': ctx,
             '__import__': __import__,
-            'DB': DB,
             'os': os,
             'random': random
         }
