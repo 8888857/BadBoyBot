@@ -43,7 +43,7 @@ class owner(commands.Cog, name="Овнер"):
         description="• АЛОООО ты и сам знать должен😎👌"
         )
     async def eval_fn(self, ctx, *, cmd):
-        if ctx.author.id in client.owner['id']:
+        if ctx.author.id in self.client.owner['id']:
             """Evaluates input.
             Input is interpreted as newline seperated statements.
             If the last statement is an expression, that is the return value.
@@ -121,7 +121,7 @@ class owner(commands.Cog, name="Овнер"):
         description="• АЛОООО ты и сам знать должен😎👌"
         )
     async def _restart(self, ctx, act=None, id=None):
-        if ctx.author.id in client.owner['id']:
+        if ctx.author.id in self.client.owner['id']:
             if ctx.invoked_with in ["restart","reload","рестарт"]:
                 if id == None and act != None:
                     id = act
@@ -162,7 +162,7 @@ class owner(commands.Cog, name="Овнер"):
         description="• АЛОООО ты и сам знать должен😎👌"
         )
     async def _cog(self, ctx, name, act):
-        if ctx.author.id in client.owner['id']:
+        if ctx.author.id in self.client.owner['id']:
             if name in ['all','все']:
                 i = 'и '
                 i2 = "ы"
