@@ -42,56 +42,59 @@ class owner(commands.Cog, name="Овнер"):
         brief="исполнение кусков кода",
         description="• АЛОООО ты и сам знать должен😎👌"
         )
-    @commands.is_owner()
     async def eval_fn(self, ctx, *, cmd):
-        """Evaluates input.
-        Input is interpreted as newline seperated statements.
-        If the last statement is an expression, that is the return value.
-        Usable globals:
-        - `bot`: the bot instance
-        - `discord`: the discord module
-        - `commands`: the discord.ext.commands module
-        - `ctx`: the invokation context
-        - `__import__`: the builtin `__import__` function
-        Such that `>eval 1 + 1` gives `2` as the result.
-        The following invokation will cause the bot to send the text '9'
-        to the channel of invokation and return '3' as the result of evaluating
-        >eval ```
-        a = 1 + 2
-        b = a * 2
-        await ctx.send(a + b)
-        a
-        ```
-        """
-        fn_name = "_eval_expr"
-
-        cmd = cmd.strip("` ")
-
-        # add a layer of indentation
-        cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
-
-        # wrap in async def body
-        body = f"async def {fn_name}():\n{cmd}"
-
-        parsed = ast.parse(body)
-        body = parsed.body[0].body
-
-        self.insert_returns(body)
-
-        env = {
-            'client': ctx.bot,
-            'bot': ctx.bot,
-            'discord': discord,
-            'commands': commands,
-            'ctx': ctx,
-            '__import__': __import__,
-            'os': os,
-            'random': random
-        }
-        exec(compile(parsed, filename="<ast>", mode="exec"), env)
-
-        result = (await eval(f"{fn_name}()", env))
-        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+        if ctx.author.id in client.owner['id']:
+            """Evaluates input.
+            Input is interpreted as newline seperated statements.
+            If the last statement is an expression, that is the return value.
+            Usable globals:
+            - `bot`: the bot instance
+            - `discord`: the discord module
+            - `commands`: the discord.ext.commands module
+            - `ctx`: the invokation context
+            - `__import__`: the builtin `__import__` function
+            Such that `>eval 1 + 1` gives `2` as the result.
+            The following invokation will cause the bot to send the text '9'
+            to the channel of invokation and return '3' as the result of evaluating
+            >eval ```
+            a = 1 + 2
+            b = a * 2
+            await ctx.send(a + b)
+            a
+            ```
+            """
+            fn_name = "_eval_expr"
+    
+            cmd = cmd.strip("` ")
+    
+            # add a layer of indentation
+            cmd = "\n".join(f"    {i}" for i in cmd.splitlines())
+    
+            # wrap in async def body
+            body = f"async def {fn_name}():\n{cmd}"
+    
+            parsed = ast.parse(body)
+            body = parsed.body[0].body
+    
+            self.insert_returns(body)
+    
+            env = {
+                'client': ctx.bot,
+                'bot': ctx.bot,
+                'discord': discord,
+                'commands': commands,
+                'ctx': ctx,
+                '__import__': __import__,
+                'config': config,
+                'os': os,
+                'random': random
+            }
+            exec(compile(parsed, filename="<ast>", mode="exec"), env)
+    
+            result = (await eval(f"{fn_name}()", env))
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+        else:
+            raise discord.ext.commands.errors.NotOwner
 
     @commands.command(
         name = "ливай",
@@ -112,17 +115,19 @@ class owner(commands.Cog, name="Овнер"):
     
     @commands.command(
         name="рестарт",
-        usage="рестарт",
+        usage="рестарт (айди)",
         brief="перезагружает бота",
         aliases=["reload","restart"],
         description="• АЛОООО ты и сам знать должен😎👌"
         )
-    @commands.is_owner()
     async def _restart(self, ctx, id=None):
-        if id == None:
-            id = "BadBoyBot"
-        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
-        os.system(f"pm2 restart {id}")
+        if ctx.author.id in client.owner['id']:
+            if id == None:
+                id = "BadBoyBot"
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+            os.system(f"pm2 restart {id}")
+        else:
+            raise discord.ext.commands.errors.NotOwner
         
     @commands.command(
         name="ког",
@@ -131,39 +136,41 @@ class owner(commands.Cog, name="Овнер"):
         aliases=["cog","коги"],
         description="• АЛОООО ты и сам знать должен😎👌"
         )
-    @commands.is_owner()
     async def _cog(self, ctx, name, act):
-        if name in ['all','все']:
-            i = 'и '
-            i2 = "ы"
-            active = "все"
+        if ctx.author.id in client.owner['id']:
+            if name in ['all','все']:
+                i = 'и '
+                i2 = "ы"
+                active = "все"
+            else:
+                i = ' '
+                i2 = ''
+                active = "один"
+            if act in ['перезагрузить','перезагрузка','релоад','reload','r','р']:
+                    act2 = "перезагружен"
+                    act3 = self.client.reload_extension
+                    emb_color = self.client.COLORS['BASE']
+            if act in ['вкл','включить','загрузить','загрузка','load','лоад','l','л']:
+                    act2 = "загружен"
+                    act3 = self.client.load_extension
+                    emb_color = self.client.COLORS['SUCCESS']
+            if act in ['выкл','выключить','отгрузка','анлоад','unload','u','а']:
+                    act2 = "отгружен"
+                    act3 = self.client.unload_extension
+                    emb_color = self.client.COLORS['ERROR']
+            if active == "все":
+                for cog in os.listdir('./Cogs'):
+                    if cog not in config.COGS_IGNORE:
+                        if cog.endswith('.py'):
+                            act3(f'Cogs.{cog.replace(".py", "")}')
+            if active == "один":
+                act3(f'Cogs.{name}')
+            print(f'-----------------------------------\nког{i}{name} - {act2}{i2}\n-----------------------------------')
+            await self.client.CHANNELS['on_off'].send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
+            await ctx.send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
         else:
-            i = ' '
-            i2 = ''
-            active = "один"
-        if act in ['перезагрузить','перезагрузка','релоад','reload','r','р']:
-                act2 = "перезагружен"
-                act3 = self.client.reload_extension
-                emb_color = self.client.COLORS['BASE']
-        if act in ['вкл','включить','загрузить','загрузка','load','лоад','l','л']:
-                act2 = "загружен"
-                act3 = self.client.load_extension
-                emb_color = self.client.COLORS['SUCCESS']
-        if act in ['выкл','выключить','отгрузка','анлоад','unload','u','а']:
-                act2 = "отгружен"
-                act3 = self.client.unload_extension
-                emb_color = self.client.COLORS['ERROR']
-        if active == "все":
-            for cog in os.listdir('./Cogs'):
-                if cog not in config.COGS_IGNORE:
-                    if cog.endswith('.py'):
-                        act3(f'Cogs.{cog.replace(".py", "")}')
-        if active == "один":
-            act3(f'Cogs.{name}')
-        print(f'-----------------------------------\nког{i}{name} - {act2}{i2}\n-----------------------------------')
-        await self.client.CHANNELS['on_off'].send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
-        await ctx.send(embed=discord.Embed(title=f"{act2}{i2}",description=f"ког{i} {name} успешно {act2}{i2}",colour=emb_color))
-        await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
+            raise discord.ext.commands.errors.NotOwner
         
     @commands.command(
         name="гинв",
@@ -184,14 +191,14 @@ class owner(commands.Cog, name="Овнер"):
         await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
         
     @commands.command(
-        name="пуш",
-        usage="пуш (бот/ког) (айди/имя)",
+        name="пул",
+        usage="пул (бот/ког) (айди/имя)",
         brief="загружает обнову с гитхаба",
-        aliases=["push"],
+        aliases=["pull"],
         description="• АЛОООО ты и сам знать должен😎👌"
         )
     @commands.is_owner()
-    async def _push(self, ctx, targ=None, pm2_id_or_cog_name=None):
+    async def _pull(self, ctx, targ=None, pm2_id_or_cog_name=None):
         os.chdir("/root/badboybot")
         os.system("git pull")
         emb = discord.Embed(description="файлы с гитхаба успешно добавлены",colour=self.client.COLORS['BASE'])
