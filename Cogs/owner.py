@@ -114,18 +114,43 @@ class owner(commands.Cog, name="Овнер"):
         await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
     
     @commands.command(
-        name="рестарт",
-        usage="рестарт (айди)",
+        name="пм2",
+        usage="пм2 [действие] (айди)",
         brief="перезагружает бота",
-        aliases=["reload","restart"],
+        aliases=["pm2","start","старт","рестарт","reload","restart","стоп","stop"],
         description="• АЛОООО ты и сам знать должен😎👌"
         )
-    async def _restart(self, ctx, id=None):
+    async def _restart(self, ctx, act=None, id=None):
         if ctx.author.id in client.owner['id']:
+            if ctx.invoked_with in ["restart","reload","рестарт"]:
+                if id == None and act != None:
+                    id = act
+                act = 'restart'
+            if ctx.invoked_with in ["stop","стоп"]:
+                if id == None and act != None:
+                    id = act
+                act = 'stop'
+            if ctx.invoked_with in ["start","старт"]:
+                if id == None and act != None:
+                    id = act
+                act = 'start'
             if id == None:
                 id = "BadBoyBot"
+            sta = ['r','restart','р','рестарт']
+            r = ['start','старт']
+            sto = ['stop','стоп']
+            if act not in sta + r + sto:
+                act == 'restart'
+            if act in ['r','restart','р','рестарт','start','старт','stop','стоп']:
+                if act in sta:
+                    act = "start"
+                if act in r:
+                    act = "restart"
+                if act in sto:
+                    act = "stop"
             await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
-            os.system(f"pm2 restart {id}")
+            await ctx.reply(embed=discord.Embed(description=f"бот с айди {id} успешно {act}",colour=self.client.COLORS['SUCCESS']))
+            os.system(f"pm2 {act} {id}")
         else:
             raise discord.ext.commands.errors.NotOwner
         
@@ -221,6 +246,8 @@ class owner(commands.Cog, name="Овнер"):
             if pm2_id_or_cog_name == None:
                 pm2_id_or_cog_name = "BadBoyBot"
             emb.add_field(name="перезагружен",value="весь бот")
+            await ctx.reply(embed=emb)
+            await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             os.system(f"pm2 reload {pm2_id_or_cog_name}")
         await ctx.reply(embed=emb)
         await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
