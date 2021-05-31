@@ -98,7 +98,7 @@ async def on_ready():
     print(f'Пинг: {round(client.latency, 3)} секунд')
     print('Я готов к работе')
     print("---------------------")
-    discord.Webhook.partial(823524857118457908,"WLGIkThKQ89Xqcczs7soJt3C9iQu8stCfeL6k88npB2S9N_eKheejLHL4eJ_ZVHt5U57", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user.mention}\n{len(client.guilds)} серверов\nПинг: {round(client.latency, 3)} секунд\n**запущен**\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
+    config.webhooks['bot_on'].send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user.mention}\n{len(client.guilds)} серверов\nПинг: {round(client.latency, 3)} секунд\n**запущен**\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
     while True:
           await client.change_presence(status=discord.Status.online, activity=discord.Game(f"{config.prefix}help"))
           await sleep(30)
@@ -112,21 +112,21 @@ async def on_disconnect():
     print(f'{len(client.guilds)} сервера')
     print('выключен.')
     print("---------------------")
-    discord.Webhook.partial(823524874513416252,"eLGwHh4OLdjGeDTTvxd9WvPZ2DqEQLfZRXG2TFhBy_P_LWrEzUQ6JYix1IfHZ6lT-3fR", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user.mention}\n{len(client.guilds)} серверов\n**выключен**\n**------------------------------------**",colour=config.COLORS['ERROR']))
+    config.webhooks['bot_off'].send(embed=discord.Embed(description=f"**------------------------------------**\n{client.user.mention}\n{len(client.guilds)} серверов\n**выключен**\n**------------------------------------**",colour=config.COLORS['ERROR']))
 
 @client.event
 async def on_shard_connect(shard_id):
     print("---------------------")
     print(f"Шард\nбота {client.user}\n№ {int(shard_id) + 1}\nID {shard_id} \nуспешно запущен")
     print("---------------------")
-    discord.Webhook.partial(823524881139892264, "-qckgNwCgOlqCrZjCQJTNTatH_XTqWT_Ulw0zH1rep-ymDzM0nAG8jemTjGp8NLlXKP5", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\nШард\nбота {client.user.mention}\n№ {int(shard_id) + 1}\nID {shard_id} \nуспешно запущен\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
+    config.webhooks['shard_on'].send(embed=discord.Embed(description=f"**------------------------------------**\nШард\nбота {client.user.mention}\n№ {int(shard_id) + 1}\nID {shard_id} \nуспешно запущен\n**------------------------------------**",colour=config.COLORS['SUCCESS']))
 
 @client.event
 async def on_shard_disconnect(shard_id):
     print("---------------------")
     print(f"Шард\nбота {client.user}\n№ {int(shard_id) + 1}\nID {shard_id} \nотключён")
     print("---------------------")
-    discord.Webhook.partial(823524888945098812, "Kg4oKTQSzxrq7foJ0-E1NMrTJH69esLbOl1EWSnOzI-7LDTIZhQMSxzhsKwwBjq_kMsS", adapter = discord.RequestsWebhookAdapter()).send(embed=discord.Embed(description=f"**------------------------------------**\nШард\nбота {client.user.mention}\n№ {int(shard_id) + 1}\nID {shard_id} \nотключён\n**------------------------------------**",colour=config.COLORS['ERROR']))
+    config.webhooks['shard_off'].send(embed=discord.Embed(description=f"**------------------------------------**\nШард\nбота {client.user.mention}\n№ {int(shard_id) + 1}\nID {shard_id} \nотключён\n**------------------------------------**",colour=config.COLORS['ERROR']))
 
 if __name__ == '__main__':
     client.run(config.TOKEN)
