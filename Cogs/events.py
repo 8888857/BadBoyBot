@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
-import config
+from config import *
+import datetime
 
 class events(commands.Cog):
     def __init__(self, client):
@@ -85,6 +86,24 @@ class events(commands.Cog):
         await self.client.get_channel(813511570529320962).send(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="серверов:",value=servers,inline=False).add_field(name="пользователей:",value=users,inline=False))
         await self.client.CHANNELS['guilds'].edit(name=f"серверов: {len(self.client.guilds)}")
         await self.client.CHANNELS['members'].edit(name=f"пользователей: {len(self.client.users)}")
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        channel = await self.client.fetch_channel(813511569795055633)
+        guild = channel.guild
+        if guild.id in self.client.owner_g:
+            await channel.send(embed=discord.Embed(title="Пользователь присоеденился.",colour=self.client.COLORS['SUCCESS']).add_field(name="Имя:",value=member.name,inline=False).add_field(name="Аккаунт создан:",value=(member.created_at + deltaMSK).strftime(timeformMSK)).set_thumbnail(url=member.avatar_url).set_footer(text=f"id {member.id}"))
+            roles = [guild.get_role(831970381304037426),guild.get_role(813511569521639479),guild.get_role(813511569521639475),guild.get_role(813511569521639476),guild.get_role(813511569521639477)]
+            for role in roles: 
+                await member.add_roles(role, atomic=True)
+            await channel.send(embed=discord.Embed(title="Пользователю добавлены роли.", description="\n".join([role.mention for role in roles]),colour=self.client.COLORS['SUCCESS']))
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        channel = await self.client.fetch_channel(813511569795055633)
+        guild = channel.guild
+        if guild.id in self.client.owner_g:
+            await channel.send(embed=discord.Embed(title="Пользователь вышел.",colour=self.client.COLORS['ERROR']).add_field(name="Имя:",value=member.name,inline=False).add_field(name="Аккаунт создан:",value=(member.created_at + deltaMSK).strftime(timeformMSK)).add_field(name="Присоеденился:",value=(member.joined_at + deltaMSK).strftime(timeformMSK)).set_thumbnail(url=member.avatar_url).set_footer(text=f"id {member.id}"))
 
 def setup(client):
     client.add_cog(events(client))
