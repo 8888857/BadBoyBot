@@ -90,7 +90,7 @@ class events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         channel = await self.client.fetch_channel(813511569795055633)
-        guild = channel.guild
+        guild = member.guild
         if guild.id in self.client.owner_g:
             await channel.send(embed=discord.Embed(title="Пользователь присоеденился.",colour=self.client.COLORS['SUCCESS']).add_field(name="Имя:",value=member.name,inline=False).add_field(name="Аккаунт создан:",value=(member.created_at + deltaMSK).strftime(timeformMSK)).set_thumbnail(url=member.avatar_url).set_footer(text=f"id {member.id}"))
             roles = [guild.get_role(831970381304037426),guild.get_role(813511569521639479),guild.get_role(813511569521639475),guild.get_role(813511569521639476),guild.get_role(813511569521639477)]
@@ -101,7 +101,7 @@ class events(commands.Cog):
     @commands.Cog.listener()
     async def on_member_remove(self, member):
         channel = await self.client.fetch_channel(813511569795055633)
-        guild = channel.guild
+        guild = member.guild
         if guild.id in self.client.owner_g:
             await channel.send(embed=discord.Embed(title="Пользователь вышел.",colour=self.client.COLORS['ERROR']).add_field(name="Имя:",value=member.name,inline=False).add_field(name="Аккаунт создан:",value=(member.created_at + deltaMSK).strftime(timeformMSK)).add_field(name="Присоеденился:",value=(member.joined_at + deltaMSK).strftime(timeformMSK)).set_thumbnail(url=member.avatar_url).set_footer(text=f"id {member.id}"))
 
