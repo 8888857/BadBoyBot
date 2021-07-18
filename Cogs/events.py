@@ -71,10 +71,10 @@ class events(commands.Cog):
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        await self.client.get_channel(813511570529320962).send(embed = discord.Embed(title = "Новый сервер!", description = "Бот зашёл на новый сервер!", colour = config.COLORS['SUCCESS']).add_field(name = "Сервер", value = guild.name).add_field(name = "Количество участников", value = len(guild.members)).add_field(name = "Владелец", value = str(guild.owner)).add_field(name = "Шард", value = f"#{guild.shard_id}").set_footer(text=f"{guild.id}").set_thumbnail(url = guild.icon_url))
+        await self.client.get_channel(813511570529320962).send(embed = discord.Embed(title = "Новый сервер!", description = "Бот зашёл на новый сервер!", colour = self.client.COLORS['SUCCESS']).add_field(name = "Сервер", value = guild.name).add_field(name = "Количество участников", value = len(guild.members)).add_field(name = "Владелец", value = str(guild.owner)).add_field(name = "Шард", value = f"#{guild.shard_id}").set_footer(text=f"{guild.id}").set_thumbnail(url = guild.icon_url))
         servers=len(self.client.guilds)
         users=len(self.client.users)
-        await self.client.get_channel(813511570529320962).send(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="серверов:",value=servers,inline=False).add_field(name="пользователей:",value=users,inline=False))
+        await self.client.get_channel(813511570529320962).send(embed=discord.Embed(colour=client.COLORS['BASE']).add_field(name="серверов:",value=servers,inline=False).add_field(name="пользователей:",value=users,inline=False))
         await self.client.CHANNELS['guilds'].edit(name=f"серверов: {len(self.client.guilds)}")
         await self.client.CHANNELS['members'].edit(name=f"пользователей: {len(self.client.users)}")
 
@@ -83,7 +83,7 @@ class events(commands.Cog):
         await self.client.get_channel(813511570529320962).send(embed = discord.Embed(title = "-сервер :(", description = "Бот покинул сервер :(", colour = self.client.COLORS['ERROR']).add_field(name = "Сервер", value = guild.name).add_field(name = "Количество участников", value = len(guild.members)).add_field(name = "Владелец", value = str(guild.owner)).add_field(name = "Шард", value = f"#{guild.shard_id}").set_footer(text=f"{guild.id}").set_thumbnail(url = guild.icon_url))
         servers=len(self.client.guilds)
         users=len(self.client.users)
-        await self.client.get_channel(813511570529320962).send(embed=discord.Embed(colour=config.COLORS['BASE']).add_field(name="серверов:",value=servers,inline=False).add_field(name="пользователей:",value=users,inline=False))
+        await self.client.get_channel(813511570529320962).send(embed=discord.Embed(colour=self.client.COLORS['BASE']).add_field(name="серверов:",value=servers,inline=False).add_field(name="пользователей:",value=users,inline=False))
         await self.client.CHANNELS['guilds'].edit(name=f"серверов: {len(self.client.guilds)}")
         await self.client.CHANNELS['members'].edit(name=f"пользователей: {len(self.client.users)}")
 
