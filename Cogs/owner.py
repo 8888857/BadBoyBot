@@ -150,7 +150,7 @@ class owner(commands.Cog, name="Овнер"):
                     act = "stop"
             await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             await ctx.reply(embed=discord.Embed(description=f"бот с айди {id} успешно {act}",colour=self.client.COLORS['SUCCESS']))
-            os.system(f"pm2 {act} {id}")
+            os.system(f"pm2 {act} {id}",shell=False)
         else:
             raise discord.ext.commands.errors.NotOwner
         
@@ -248,7 +248,7 @@ class owner(commands.Cog, name="Овнер"):
             emb.add_field(name="перезагружен",value="весь бот")
             await ctx.reply(embed=emb)
             await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
-            os.system(f"pm2 reload {pm2_id_or_cog_name}")
+            os.system(f"pm2 reload {pm2_id_or_cog_name}",shell=False)
         await ctx.reply(embed=emb)
         await ctx.message.add_reaction(self.client.EMOJIS['SUCCESS'])
             
