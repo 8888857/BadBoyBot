@@ -23,7 +23,7 @@
 > > > * @Im_bread_programmer.#0001 
 
 
-## команды
+## Команды
 
 ### Информация
 > *Команды информации*
@@ -66,7 +66,7 @@
 > > > * @Im_bread_programmer.#0001
 
 
-## commands
+## Commands
 
 ### Information
 > *Information Commands*
