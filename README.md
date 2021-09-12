@@ -27,6 +27,7 @@
 
 ### Информация
 > *Команды информации*
+
 Команда|Описание
 -------|--------
 .хелп|Помощь по командам
@@ -68,6 +69,8 @@
 ## commands
 
 ### Information
+> *Information Commands*
+
 Command|description
 -------|-----------
 .help|Command Help
@@ -81,6 +84,8 @@ Command|description
 .info-role|role info
 
 ### Moderation
+> *Moderation commands*
+
 Command|Description
 -------|-----------
 .clear|Clear chat
