@@ -80,7 +80,7 @@ Command|description
 ### Moderation
 Command|Description
 -------|-----------
-. clear|Clear chat
+.clear|Clear chat
 .set_nick|Change nickname
 .kick|Kick user
 .ban|Ban user
