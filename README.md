@@ -8,9 +8,9 @@
     * [Commands](#commands)
         * [Information](#information)
         * [Moderation](#moderation)
+= = =
 - - -
-- - -
-- - -
+= = =
 ###### [ru]
 # BadBoyBot
 > Создатель:
