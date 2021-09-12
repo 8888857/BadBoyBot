@@ -39,6 +39,14 @@
 .инфо-роль|Информация о роле
 
 ### Модерация
+Команда|Описание
+-------|--------
+.очистить|Очистка чата
+.сет_ник|Сменить никнейм
+.кик|Выгнать пользователя
+.бан|Забанить пользователя
+.разбан|Разбанить пользователя
+.роль|Выдать/забрать роль
 
 
 ###### [en]
@@ -59,14 +67,22 @@
 ### Information
 Command|description
 -------|-----------
-.help | Command Help
-.user | User Information
-.avatar | user avatar
-.server | Server Information
-.emoji | Emoji Info
-.bot | About BadBoyBot'e
-.ping | Ping BadBoyBot'a
-.channel | Channel Information
-.info-role | role info
+.help|Command Help
+.user|User Information
+.avatar|user avatar
+.server|Server Information
+.emoji|Emoji Info
+.bot|About BadBoyBot'e
+.ping|Ping BadBoyBot'a
+.channel|Channel Information
+.info-role|role info
 
 ### Moderation
+Command|Description
+-------|-----------
+. clear|Clear chat
+.set_nick|Change nickname
+.kick|Kick user
+.ban|Ban user
+.unban|Unban user
+.role|Issue/Take Out Role
