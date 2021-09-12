@@ -1,6 +1,6 @@
 # BadBoyBot
 > by @〔🙃〕ПуПСиК〔😁〕#7828 
-> > participated in the development 
+> > participated in the development @stepasha#5704 , @TheRealWerd#5392 , @Не пропадающий#2943 , @Я_хлебушек.#7678 
 
 
 ## команды
