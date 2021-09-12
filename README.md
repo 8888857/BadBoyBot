@@ -9,6 +9,7 @@
         * [Information](#information)
         * [Moderation](#moderation)
 
+
 ###### [ru]
 # BadBoyBot
 > Создатель:
@@ -36,7 +37,9 @@
 .пинг|Пинг BadBoyBot'a
 .канал|Информация о канале
 .инфо-роль|Информация о роле
+
 ### Модерация
+
 
 ###### [en]
 # BadBoyBot
