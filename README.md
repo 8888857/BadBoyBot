@@ -1,5 +1,18 @@
+* [[ru]](#ru)
+    * [BadBoyBot](#ru)
+    * [Команды](#команды)
+        * [Информация](#информация)
+        * [Модерация](#модерация)
+* [[en]](#en)
+    * [BadBoyBot](#en)
+    * [Commands](#commands)
+        * [Information](#information)
+        * [Moderation](#moderation)
+
+###### [ru]
 # BadBoyBot
-> Создатель @〔🙃〕ПуПСиК〔😁〕#7828 
+> Создатель:
+> * @〔🙃〕ПуПСиК〔😁〕#7828 
 > > В разработке участвовали: 
 > > * @stepasha#5704
 > > * @TheRealWerd#5392
@@ -10,6 +23,7 @@
 
 
 ## команды
+
 ### Информация
 Команда|Описание
 -------|--------
@@ -23,3 +37,33 @@
 .канал|Информация о канале
 .инфо-роль|Информация о роле
 ### Модерация
+
+###### [en]
+# BadBoyBot
+> Creator:
+> * @〔🙃〕ПуПСиК〔😁〕#7828 
+> > Participated in the development: 
+> > * @stepasha#5704
+> > * @TheRealWerd#5392
+> > * @Не пропадающий#2943
+> > * @Я_хлебушек.#7678 
+> > > And:
+> > > * @Im_bread_programmer.#0001
+
+
+## commands
+
+### Information
+Command|description
+-------|-----------
+.help | Command Help
+.user | User Information
+.avatar | user avatar
+.server | Server Information
+.emoji | Emoji Info
+.bot | About BadBoyBot'e
+.ping | Ping BadBoyBot'a
+.channel | Channel Information
+.info-role | role info
+
+### Moderation
