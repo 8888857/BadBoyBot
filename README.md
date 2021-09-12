@@ -8,9 +8,9 @@
     * [Commands](#commands)
         * [Information](#information)
         * [Moderation](#moderation)
-= = =
 - - -
-= = =
+- - -
+- - -
 ###### [ru]
 # BadBoyBot
 > Создатель:
@@ -22,7 +22,6 @@
 > > * @Я_хлебушек.#7678 
 > > > А также:
 > > > * @Im_bread_programmer.#0001 
-- - -
 - - -
 ## Команды
 
@@ -66,7 +65,6 @@
 > > * @Я_хлебушек.#7678 
 > > > And:
 > > > * @Im_bread_programmer.#0001
-- - -
 - - -
 ## Commands
 
